@@ -25,5 +25,11 @@ class SellerDAO{
                 FROM vendedor
                 WHERE correo = '$this->email' AND clave = '$this->password'";
     }
+
+    public function consultarPorId(){
+        return "SELECT nombre, apellido, correo, identificacion, img
+                FROM vendedor
+                WHERE idVendedor = $this->idPerson";
+    }
 }
 ?>

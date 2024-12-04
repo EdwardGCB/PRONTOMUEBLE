@@ -6,22 +6,28 @@ class AdministratorDAO{
     private $email;
     private $password;
     private $identification;
-    private $phones;
+    private $img;
 
-    public function __construct($idPerson=0, $name="", $lastname="", $email="", $password="", $identification="", $phones=0) {
+    public function __construct($idPerson=0, $name="", $lastname="", $email="", $password="", $identification="", $img="") {
         $this -> idPerson = $idPerson;
         $this -> name = $name;
         $this -> lastname = $lastname;
         $this -> email = $email;
         $this -> password = $password;
         $this -> identification = $identification;
-        $this -> phones = $phones;
+        $this -> img = $img;
     }
 
     public function autentication() {
         return "SELECT idAdministrador
                 FROM administrador
                 WHERE correo = '$this->email' AND clave = '$this->password'";
+    }
+
+    public function consultarPorId(){
+        return "SELECT nombre, apellido, correo, identificacion, img
+                FROM administrador
+                WHERE idAdministrador = $this->idPerson";
     }
 
 }

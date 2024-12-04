@@ -29,6 +29,5 @@ class ProductProperty{
         $this->product = $product;
         $this->property = $property;
     }
-
 }
 ?>

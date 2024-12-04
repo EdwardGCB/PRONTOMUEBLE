@@ -10,7 +10,7 @@ class Person{
     protected $email;
     protected $password;
     protected $identification;
-    protected $phones;
+    protected $img;
 
     public function getIdPerson(): int{
         return $this->idPerson;
@@ -49,21 +49,21 @@ class Person{
     public function setIdentification($identification){
         $this->identification = $identification;
     }
-    public function getPhones(){
-        return $this->phones;
+    public function getImg(){
+        return $this->img;
     }
-    public function setPhones($phones){
-        $this->phones = $phones;
+    public function setImg($img){
+        $this->img = $img;
     }
 
-    public function __construct($idPerson, $name, $lastname, $email, $password, $identification, $phones) { 
+    public function __construct($idPerson, $name, $lastname, $email, $password, $identification, $img) { 
         $this->idPerson = $idPerson; 
         $this->name = $name; 
         $this->lastname = $lastname; 
         $this->email = $email; 
         $this->password = $password; 
         $this->identification = $identification; 
-        $this->phones = $phones; 
+        $this->img = $img; 
     }
 
 }
