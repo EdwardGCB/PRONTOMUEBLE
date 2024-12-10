@@ -1,6 +1,6 @@
 <?php
-require_once("../persistence/Conexion.php");
-require("../persistence/ProductDAO.php");
+require_once (__DIR__.'../../persistence/Conexion.php');
+require_once (__DIR__.'../../persistence/ProductDAO.php');
 class Product{
     private $idProduct;
     private $name;
