@@ -1,4 +1,4 @@
-INSERT INTO Administrador (nombre, apellido, correo, identificacion, contraseña)
+INSERT INTO Administrador (nombre, apellido, correo, identificacion, clave)
 VALUES(
     "Robinson",
     "Alza",

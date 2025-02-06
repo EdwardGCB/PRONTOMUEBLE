@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`Administrador` (
   `apellido` VARCHAR(45) NOT NULL,
   `correo` VARCHAR(100) NOT NULL,
   `identificacion` VARCHAR(10) NOT NULL,
-  `contraseña` VARCHAR(100) NOT NULL,
+  `clave` VARCHAR(100) NOT NULL,
   `img` VARCHAR(45) NULL,
   PRIMARY KEY (`idAdministrador`))
 ENGINE = InnoDB;
@@ -46,13 +46,13 @@ CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`Mueble` (
   `nombre` VARCHAR(45) NOT NULL,
   `descripcion` VARCHAR(45) NOT NULL,
   `img` VARCHAR(45) NULL,
-  `Administrador_idAdministrador` INT NOT NULL,
-  `Tipo_idTipo` INT NOT NULL,
+  `administrador_idAdministrador` INT NOT NULL,
+  `idTipo` INT NOT NULL,
   PRIMARY KEY (`idMueble`),
-  INDEX `fk_Mueble_Administrador1_idx` (`Administrador_idAdministrador` ASC),
+  INDEX `fk_Mueble_Administrador1_idx` (`administrador_idAdministrador` ASC),
   INDEX `fk_Mueble_Tipo1_idx` (`Tipo_idTipo` ASC),
   CONSTRAINT `fk_Mueble_Administrador1`
-    FOREIGN KEY (`Administrador_idAdministrador`)
+    FOREIGN KEY (`administrador_idAdministrador`)
     REFERENCES `PRONTOMUEBLE`.`Administrador` (`idAdministrador`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -74,11 +74,11 @@ CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`Proveedor` (
   `direccion` VARCHAR(45) NOT NULL,
   `nit` VARCHAR(45) NOT NULL,
   `img` VARCHAR(45) NULL,
-  `Administrador_idAdministrador` INT NOT NULL,
+  `administrador_idAdministrador` INT NOT NULL,
   PRIMARY KEY (`idProveedor`),
-  INDEX `fk_Proveedor_Administrador1_idx` (`Administrador_idAdministrador` ASC),
+  INDEX `fk_Proveedor_Administrador1_idx` (`administrador_idAdministrador` ASC),
   CONSTRAINT `fk_Proveedor_Administrador1`
-    FOREIGN KEY (`Administrador_idAdministrador`)
+    FOREIGN KEY (`administrador_idAdministrador`)
     REFERENCES `PRONTOMUEBLE`.`Administrador` (`idAdministrador`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -91,17 +91,17 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`PedidoMueble` (
   `cantidad` INT NOT NULL,
   `precio` DOUBLE NOT NULL,
-  `Proveedor_idProveedor` INT NOT NULL,
-  `Mueble_idMueble` INT NOT NULL,
-  PRIMARY KEY (`Proveedor_idProveedor`, `Mueble_idMueble`),
-  INDEX `fk_ProveedorMueble_Mueble1_idx` (`Mueble_idMueble` ASC),
+  `proveedor_idProveedor` INT NOT NULL,
+  `mueble_idMueble` INT NOT NULL,
+  PRIMARY KEY (`proveedor_idProveedor`, `mueble_idMueble`),
+  INDEX `fk_ProveedorMueble_Mueble1_idx` (`mueble_idMueble` ASC),
   CONSTRAINT `fk_ProveedorMueble_Proveedor`
-    FOREIGN KEY (`Proveedor_idProveedor`)
+    FOREIGN KEY (`proveedor_idProveedor`)
     REFERENCES `PRONTOMUEBLE`.`Proveedor` (`idProveedor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_ProveedorMueble_Mueble1`
-    FOREIGN KEY (`Mueble_idMueble`)
+    FOREIGN KEY (`mueble_idMueble`)
     REFERENCES `PRONTOMUEBLE`.`Mueble` (`idMueble`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -113,11 +113,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`TelefonoP` (
   `idTelefonoP` BIGINT NOT NULL,
-  `Proveedor_idProveedor` INT NOT NULL,
+  `proveedor_idProveedor` INT NOT NULL,
   PRIMARY KEY (`idTelefonoP`),
-  INDEX `fk_TelefonoP_Proveedor1_idx` (`Proveedor_idProveedor` ASC),
+  INDEX `fk_TelefonoP_Proveedor1_idx` (`proveedor_idProveedor` ASC),
   CONSTRAINT `fk_TelefonoP_Proveedor1`
-    FOREIGN KEY (`Proveedor_idProveedor`)
+    FOREIGN KEY (`proveedor_idProveedor`)
     REFERENCES `PRONTOMUEBLE`.`Proveedor` (`idProveedor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -130,11 +130,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`Propiedad` (
   `idPropiedad` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
-  `Tipo_idTipo` INT NOT NULL,
+  `tipo_idTipo` INT NOT NULL,
   PRIMARY KEY (`idPropiedad`),
-  INDEX `fk_Propiedad_Tipo1_idx` (`Tipo_idTipo` ASC),
+  INDEX `fk_Propiedad_Tipo1_idx` (`tipo_idTipo` ASC),
   CONSTRAINT `fk_Propiedad_Tipo1`
-    FOREIGN KEY (`Tipo_idTipo`)
+    FOREIGN KEY (`tipo_idTipo`)
     REFERENCES `PRONTOMUEBLE`.`Tipo` (`idTipo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -146,17 +146,17 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`PropiedadMueble` (
   `descripcion` VARCHAR(45) NOT NULL,
-  `Propiedad_idPropiedad` INT NOT NULL,
-  `Mueble_idMueble` INT NOT NULL,
-  PRIMARY KEY (`Propiedad_idPropiedad`, `Mueble_idMueble`),
-  INDEX `fk_PropiedadMueble_Mueble1_idx` (`Mueble_idMueble` ASC),
+  `propiedad_idPropiedad` INT NOT NULL,
+  `mueble_idMueble` INT NOT NULL,
+  PRIMARY KEY (`propiedad_idPropiedad`, `mueble_idMueble`),
+  INDEX `fk_PropiedadMueble_Mueble1_idx` (`mueble_idMueble` ASC),
   CONSTRAINT `fk_PropiedadMueble_Propiedad1`
-    FOREIGN KEY (`Propiedad_idPropiedad`)
+    FOREIGN KEY (`propiedad_idPropiedad`)
     REFERENCES `PRONTOMUEBLE`.`Propiedad` (`idPropiedad`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_PropiedadMueble_Mueble1`
-    FOREIGN KEY (`Mueble_idMueble`)
+    FOREIGN KEY (`mueble_idMueble`)
     REFERENCES `PRONTOMUEBLE`.`Mueble` (`idMueble`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -172,13 +172,13 @@ CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`Vendedor` (
   `apellido` VARCHAR(45) NOT NULL,
   `correo` VARCHAR(100) NOT NULL,
   `identificacion` VARCHAR(10) NOT NULL,
-  `contraseña` VARCHAR(100) NOT NULL,
+  `clave` VARCHAR(100) NOT NULL,
   `img` VARCHAR(45) NULL,
-  `Administrador_idAdministrador` INT NOT NULL,
+  `administrador_idAdministrador` INT NOT NULL,
   PRIMARY KEY (`idVendedor`),
-  INDEX `fk_Vendedor_Administrador1_idx` (`Administrador_idAdministrador` ASC),
+  INDEX `fk_Vendedor_Administrador1_idx` (`administrador_idAdministrador` ASC),
   CONSTRAINT `fk_Vendedor_Administrador1`
-    FOREIGN KEY (`Administrador_idAdministrador`)
+    FOREIGN KEY (`administrador_idAdministrador`)
     REFERENCES `PRONTOMUEBLE`.`Administrador` (`idAdministrador`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -190,11 +190,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`TelefonoV` (
   `idTelefonoV` BIGINT NOT NULL,
-  `Vendedor_idVendedor` INT NOT NULL,
+  `vendedor_idVendedor` INT NOT NULL,
   PRIMARY KEY (`idTelefonoV`),
-  INDEX `fk_TelefonoV_Vendedor1_idx` (`Vendedor_idVendedor` ASC),
+  INDEX `fk_TelefonoV_Vendedor1_idx` (`vendedor_idVendedor` ASC),
   CONSTRAINT `fk_TelefonoV_Vendedor1`
-    FOREIGN KEY (`Vendedor_idVendedor`)
+    FOREIGN KEY (`vendedor_idVendedor`)
     REFERENCES `PRONTOMUEBLE`.`Vendedor` (`idVendedor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -210,12 +210,12 @@ CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`Cliente` (
   `apellido` VARCHAR(45) NOT NULL,
   `correo` VARCHAR(100) NOT NULL,
   `identificacion` VARCHAR(10) NOT NULL,
-  `fecha` DATE NOT NULL,
-  `Vendedor_idVendedor` INT NOT NULL,
+  `fechaCreacion` DATE NOT NULL,
+  `vendedor_idVendedor` INT NOT NULL,
   PRIMARY KEY (`idCliente`),
-  INDEX `fk_Cliente_Vendedor1_idx` (`Vendedor_idVendedor` ASC),
+  INDEX `fk_Cliente_Vendedor1_idx` (`vendedor_idVendedor` ASC),
   CONSTRAINT `fk_Cliente_Vendedor1`
-    FOREIGN KEY (`Vendedor_idVendedor`)
+    FOREIGN KEY (`vendedor_idVendedor`)
     REFERENCES `PRONTOMUEBLE`.`Vendedor` (`idVendedor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -227,26 +227,26 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`Cotizacion` (
   `cantidad` INT NOT NULL,
-  `Cliente_idCliente` INT NOT NULL,
-  `Vendedor_idVendedor` INT NOT NULL,
-  `ProveedorMueble_Proveedor_idProveedor` INT NOT NULL,
-  `ProveedorMueble_Mueble_idMueble` INT NOT NULL,
-  PRIMARY KEY (`Cliente_idCliente`, `Vendedor_idVendedor`, `ProveedorMueble_Proveedor_idProveedor`, `ProveedorMueble_Mueble_idMueble`),
-  INDEX `fk_Cotizacion_Cliente1_idx` (`Cliente_idCliente` ASC),
-  INDEX `fk_Cotizacion_Vendedor1_idx` (`Vendedor_idVendedor` ASC),
-  INDEX `fk_Cotizacion_ProveedorMueble1_idx` (`ProveedorMueble_Proveedor_idProveedor` ASC, `ProveedorMueble_Mueble_idMueble` ASC),
+  `cliente_idCliente` INT NOT NULL,
+  `vendedor_idVendedor` INT NOT NULL,
+  `proveedorMueble_Proveedor_idProveedor` INT NOT NULL,
+  `proveedorMueble_Mueble_idMueble` INT NOT NULL,
+  PRIMARY KEY (`cliente_idCliente`, `vendedor_idVendedor`, `proveedorMueble_Proveedor_idProveedor`, `proveedorMueble_Mueble_idMueble`),
+  INDEX `fk_Cotizacion_Cliente1_idx` (`cliente_idCliente` ASC),
+  INDEX `fk_Cotizacion_Vendedor1_idx` (`vendedor_idVendedor` ASC),
+  INDEX `fk_Cotizacion_ProveedorMueble1_idx` (`proveedorMueble_Proveedor_idProveedor` ASC, `proveedorMueble_Mueble_idMueble` ASC),
   CONSTRAINT `fk_Cotizacion_Cliente1`
-    FOREIGN KEY (`Cliente_idCliente`)
+    FOREIGN KEY (`cliente_idCliente`)
     REFERENCES `PRONTOMUEBLE`.`Cliente` (`idCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Cotizacion_Vendedor1`
-    FOREIGN KEY (`Vendedor_idVendedor`)
+    FOREIGN KEY (`vendedor_idVendedor`)
     REFERENCES `PRONTOMUEBLE`.`Vendedor` (`idVendedor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Cotizacion_ProveedorMueble1`
-    FOREIGN KEY (`ProveedorMueble_Proveedor_idProveedor` , `ProveedorMueble_Mueble_idMueble`)
+    FOREIGN KEY (`proveedorMueble_Proveedor_idProveedor` , `proveedorMueble_Mueble_idMueble`)
     REFERENCES `PRONTOMUEBLE`.`PedidoProveedor` (`Proveedor_idProveedor` , `Mueble_idMueble`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -260,22 +260,22 @@ CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`Factura` (
   `idFactura` INT NOT NULL AUTO_INCREMENT,
   `cantidadTotal` INT NOT NULL,
   `subTotal` DOUBLE NOT NULL,
-  `fecha` DATE NOT NULL,
-  `hora` TIME NOT NULL,
+  `fechaCreacion` DATE NOT NULL,
+  `horaCreacion` TIME NOT NULL,
   `iva` INT NOT NULL,
   `total` DOUBLE NOT NULL,
-  `Vendedor_idVendedor` INT NOT NULL,
-  `Cliente_idCliente` INT NOT NULL,
+  `vendedor_idVendedor` INT NOT NULL,
+  `cliente_idCliente` INT NOT NULL,
   PRIMARY KEY (`idFactura`),
-  INDEX `fk_Factura_Vendedor1_idx` (`Vendedor_idVendedor` ASC),
-  INDEX `fk_Factura_Cliente1_idx` (`Cliente_idCliente` ASC),
+  INDEX `fk_Factura_Vendedor1_idx` (`vendedor_idVendedor` ASC),
+  INDEX `fk_Factura_Cliente1_idx` (`cliente_idCliente` ASC),
   CONSTRAINT `fk_Factura_Vendedor1`
-    FOREIGN KEY (`Vendedor_idVendedor`)
+    FOREIGN KEY (`vendedor_idVendedor`)
     REFERENCES `PRONTOMUEBLE`.`Vendedor` (`idVendedor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Factura_Cliente1`
-    FOREIGN KEY (`Cliente_idCliente`)
+    FOREIGN KEY (`cliente_idCliente`)
     REFERENCES `PRONTOMUEBLE`.`Cliente` (`idCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -288,19 +288,19 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`DetalleFactura` (
   `cantidad` INT NOT NULL,
   `precio` DOUBLE NOT NULL,
-  `Factura_idFactura` INT NOT NULL,
-  `ProveedorMueble_Proveedor_idProveedor` INT NOT NULL,
-  `ProveedorMueble_Mueble_idMueble` INT NOT NULL,
-  PRIMARY KEY (`Factura_idFactura`, `ProveedorMueble_Proveedor_idProveedor`, `ProveedorMueble_Mueble_idMueble`),
-  INDEX `fk_DetalleFactura_Factura1_idx` (`Factura_idFactura` ASC),
-  INDEX `fk_MuebleFactura_ProveedorMueble1_idx` (`ProveedorMueble_Proveedor_idProveedor` ASC, `ProveedorMueble_Mueble_idMueble` ASC),
+  `factura_idFactura` INT NOT NULL,
+  `proveedorMueble_Proveedor_idProveedor` INT NOT NULL,
+  `proveedorMueble_Mueble_idMueble` INT NOT NULL,
+  PRIMARY KEY (`factura_idFactura`, `proveedorMueble_Proveedor_idProveedor`, `proveedorMueble_Mueble_idMueble`),
+  INDEX `fk_DetalleFactura_Factura1_idx` (`factura_idFactura` ASC),
+  INDEX `fk_MuebleFactura_ProveedorMueble1_idx` (`proveedorMueble_Proveedor_idProveedor` ASC, `proveedorMueble_Mueble_idMueble` ASC),
   CONSTRAINT `fk_DetalleFactura_Factura1`
-    FOREIGN KEY (`Factura_idFactura`)
+    FOREIGN KEY (`factura_idFactura`)
     REFERENCES `PRONTOMUEBLE`.`Factura` (`idFactura`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_MuebleFactura_ProveedorMueble1`
-    FOREIGN KEY (`ProveedorMueble_Proveedor_idProveedor` , `ProveedorMueble_Mueble_idMueble`)
+    FOREIGN KEY (`proveedorMueble_Proveedor_idProveedor` , `proveedorMueble_Mueble_idMueble`)
     REFERENCES `PRONTOMUEBLE`.`PedidoProveedor` (`Proveedor_idProveedor` , `Mueble_idMueble`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -312,11 +312,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PRONTOMUEBLE`.`TelefonoC` (
   `idTelefonoC` BIGINT NOT NULL,
-  `Cliente_idCliente` INT NOT NULL,
+  `cliente_idCliente` INT NOT NULL,
   PRIMARY KEY (`idTelefonoC`),
-  INDEX `fk_TelefonoC_Cliente1_idx` (`Cliente_idCliente` ASC),
+  INDEX `fk_TelefonoC_Cliente1_idx` (`cliente_idCliente` ASC),
   CONSTRAINT `fk_TelefonoC_Cliente1`
-    FOREIGN KEY (`Cliente_idCliente`)
+    FOREIGN KEY (`cliente_idCliente`)
     REFERENCES `PRONTOMUEBLE`.`Cliente` (`idCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
