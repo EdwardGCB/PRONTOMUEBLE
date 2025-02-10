@@ -24,7 +24,8 @@ $pagesWithOutSession = array(
 $pagesWithSession = array(
     "client/pages/Home.php",
     "client/pages/Users.php",
-    "client/pages/Products.php"
+    "client/pages/Products.php",
+    "client/pages/Clients.php"
 );
 
 

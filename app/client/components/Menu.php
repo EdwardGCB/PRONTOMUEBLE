@@ -26,7 +26,7 @@ $route = base64_decode($_GET['pid']);
         <div>
             <a href="?pid=<?= base64_encode("client/pages/Home.php")?>" class="nav_logo">
                 <span class="material-symbols-rounded nav_logo-icon">layers</span>
-                <span class="nav_logo-name">BBBootstrap</span>
+                <span class="nav_logo-name">Prontomueble</span>
             </a>
             <div class="nav_list">
                 <a href="?pid=<?= base64_encode("client/pages/Home.php")?>" class="nav_link <?= ($route=="client/pages/Home.php")?"active":"" ?>">
@@ -40,6 +40,10 @@ $route = base64_decode($_GET['pid']);
                 <a href="?pid=<?= base64_encode("client/pages/Products.php")?>" class="nav_link <?= ($route=="client/pages/Products.php")?"active":"" ?>">
                     <span class="material-symbols-rounded nav_icon">inventory_2</span>
                     <span class="nav_name">Products</span>
+                </a>
+                <a href="?pid=<?= base64_encode("client/pages/Clients.php")?>" class="nav_link <?= ($route=="client/pages/Clients.php")?"active":"" ?>">
+                    <span class="material-symbols-rounded nav_icon">article_person</span>
+                    <span class="nav_name">Clients</span>
                 </a>
                 <a href="#" class="nav_link">
                     <span class="material-symbols-rounded nav_icon">bookmark</span>

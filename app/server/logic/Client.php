@@ -18,8 +18,7 @@ class Client extends Person{
     public function setSeller(string $seller): void{
         $this->seller = $seller;
     }
-
-
+    
     public function __construct($idPerson=0, $name="", $lastname="", $email="", $password="", $identification=0, $phones=null, $dateInit="", $seller=null) {
         parent::__construct($idPerson, $name, $lastname, $email, $password, $identification, $phones);
         $this->dateInit = $dateInit;
