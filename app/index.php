@@ -4,27 +4,26 @@ if (isset($_GET["CerrarSesion"])) {
     session_destroy();
 }
 
-require("server/logic/Person.php");
-require("server/logic/Administrator.php");
-require("server/logic/Client.php");
-require("server/logic/Seller.php");
-require("server/logic/Product.php");
-require("server/logic/ProductSupplier.php");
-//require("server/logic/Phone.php");
-//require("server/logic/Pre-Sale.php");
-//require("server/logic/ProductProperty.php");
-//require("server/logic/Property.php");
-//require("server/logic/Sale.php");
-//require("server/logic/SaleDetail.php");
-
+require("logic/Persona.php");
+require("logic/Administrador.php");
+require("logic/Cliente.php");
+require("logic/vendedor.php");
+require("logic/Mueble.php");
+require("logic/PedidoProveedor.php");
+require("logic/Telefono.php");
+require("logic/Cotizacion.php");
+require("logic/MueblePropiedad.php");
+require("logic/Propiedad.php");
+require("logic/Factura.php");
+require("logic/DetalleFactura.php");
 $pagesWithOutSession = array(
-    "client/pages/LoginPage.php"
+    "pages/LoginPage.php"
 );
 
 $pagesWithSession = array(
-    "client/pages/Home.php",
-    "client/pages/Users.php",
-    "client/pages/Products.php"
+    "pages/Home.php",
+    "pages/Users.php",
+    "pages/Products.php"
 );
 
 
@@ -49,7 +48,7 @@ $pagesWithSession = array(
 
     <?php
     if (!isset($_GET["pid"])) {
-        include("client/pages/LoginPage.php");
+        include("pages/LoginPage.php");
     } else {
         $pid = base64_decode($_GET["pid"]);
         if (in_array($pid, $pagesWithOutSession)) {
@@ -58,7 +57,7 @@ $pagesWithSession = array(
             if (isset($_SESSION["id"])) {
                 include($pid);
             } else {
-                include("client/pages/LoginPage.php");
+                include("pages/LoginPage.php");
             }
         } else {
             echo "<h1>Error 404</h1>";
