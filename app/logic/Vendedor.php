@@ -23,8 +23,8 @@ class Vendedor extends Persona{
         $this->password = $password;
     }
 
-    public function __construct($idPerson = 0, $name = "", $lastname = "", $identification = 0, $img = "", $correo = "", $administrador = null, $telefonos = null, $password = ""){
-        parent::__construct($idPerson, $name, $lastname, $identification, $img, $correo);
+    public function __construct($idPersona = 0, $nombres = "", $apellidos = "", $identificacion = 0, $img = "", $correo = "", $telefonos = null, $password = "", $administrador = null){
+        parent::__construct($idPersona, $nombres, $apellidos, $identificacion, $img, $correo);
         $this->administrador = $administrador;
         $this->telefonos = $telefonos;
         $this->password = $password;
@@ -62,6 +62,22 @@ class Vendedor extends Persona{
         $this->img = $registro[4];
         $conexion->cerrarConexion();
         return true;
+    }
+
+    public function consultarPorNombre(){
+        $vendedores = array();
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $sellerDAO = new VendedorDAO(null, $this->nombres);
+        $conexion->ejecutarConsulta($sellerDAO -> consultarPorNombre());
+        while($resultado = $conexion->siguienteRegistro()){
+            $vendedor = new Vendedor($resultado[0], $resultado[1], $resultado[2], $resultado[3], null, $resultado[4]);
+            $vendedor->consultarPorId();
+            array_push($vendedores, $vendedor);
+        }
+        
+        $conexion->cerrarConexion();
+        return $vendedores;
     }
 }
 ?>

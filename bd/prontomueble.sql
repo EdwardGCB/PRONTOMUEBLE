@@ -1,0 +1,544 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 11-02-2025 a las 05:12:03
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `prontomueble`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `administrador`
+--
+
+CREATE TABLE `administrador` (
+  `idAdministrador` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `apellido` varchar(45) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `identificacion` varchar(10) NOT NULL,
+  `clave` varchar(45) NOT NULL,
+  `img` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `administrador`
+--
+
+INSERT INTO `administrador` (`idAdministrador`, `nombre`, `apellido`, `correo`, `identificacion`, `clave`, `img`) VALUES
+(1, 'Robinson', 'Alza', 'R.alza@PRONTOMUEBLE.com', '1234567890', '202cb962ac59075b964b07152d234b70', NULL),
+(2, 'Edward', 'Castillo', 'E.castillo@PRONTOMUEBLE.com', '9876543210', '202cb962ac59075b964b07152d234b70', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cliente`
+--
+
+CREATE TABLE `cliente` (
+  `idCliente` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `apellido` varchar(45) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `identificacion` varchar(10) NOT NULL,
+  `fechaCreacion` date NOT NULL,
+  `Vendedor_idVendedor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO `cliente` (`idCliente`, `nombre`, `apellido`, `correo`, `identificacion`, `fechaCreacion`, `Vendedor_idVendedor`) VALUES
+(1, 'Juan', 'Pérez', 'juan.perez@example.com', '1234567890', '2024-02-09', 1),
+(2, 'María', 'Gómez', 'maria.gomez@example.com', '0987654321', '2024-02-09', 2),
+(3, 'Carlos', 'López', 'carlos.lopez@example.com', '1122334455', '2024-02-09', 1),
+(4, 'Ana', 'Martínez', 'ana.martinez@example.com', '2233445566', '2024-02-09', 3),
+(5, 'Pedro', 'Rodríguez', 'pedro.rodriguez@example.com', '3344556677', '2024-02-09', 2),
+(6, 'Laura', 'Fernández', 'laura.fernandez@example.com', '4455667788', '2024-02-09', 3),
+(7, 'Luis', 'Torres', 'luis.torres@example.com', '5566778899', '2024-02-09', 1),
+(8, 'Sofía', 'Díaz', 'sofia.diaz@example.com', '6677889900', '2024-02-09', 2),
+(9, 'Miguel', 'Hernández', 'miguel.hernandez@example.com', '7788990011', '2024-02-09', 3),
+(10, 'Elena', 'Castro', 'elena.castro@example.com', '8899001122', '2024-02-09', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cotizacion`
+--
+
+CREATE TABLE `cotizacion` (
+  `cantidad` int(11) NOT NULL,
+  `Cliente_idCliente` int(11) NOT NULL,
+  `Vendedor_idVendedor` int(11) NOT NULL,
+  `PedidoProveedor_Proveedor_idProveedor` int(11) NOT NULL,
+  `PedidoProveedor_Mueble_idMueble` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detallefactura`
+--
+
+CREATE TABLE `detallefactura` (
+  `cantidad` int(11) NOT NULL,
+  `precio` double NOT NULL,
+  `Factura_idFactura` int(11) NOT NULL,
+  `PedidoProveedor_Proveedor_idProveedor` int(11) NOT NULL,
+  `PedidoProveedor_Mueble_idMueble` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura`
+--
+
+CREATE TABLE `factura` (
+  `idFactura` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `subTotal` double NOT NULL,
+  `fechaCreacion` date NOT NULL,
+  `horaCreacion` time NOT NULL,
+  `iva` int(11) NOT NULL,
+  `total` double NOT NULL,
+  `Vendedor_idVendedor` int(11) NOT NULL,
+  `Cliente_idCliente` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mueble`
+--
+
+CREATE TABLE `mueble` (
+  `idMueble` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `descripcion` varchar(45) NOT NULL,
+  `img` varchar(45) DEFAULT NULL,
+  `Administrador_idAdministrador` int(11) NOT NULL,
+  `Tipo_idTipo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedidoproveedor`
+--
+
+CREATE TABLE `pedidoproveedor` (
+  `cantidadPost` int(11) NOT NULL,
+  `cantidadPre` int(11) NOT NULL,
+  `precio` double NOT NULL,
+  `ganancia` float NOT NULL,
+  `precioFinal` double NOT NULL,
+  `Proveedor_idProveedor` int(11) NOT NULL,
+  `Mueble_idMueble` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `propiedad`
+--
+
+CREATE TABLE `propiedad` (
+  `idPropiedad` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `Tipo_idTipo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `propiedadmueble`
+--
+
+CREATE TABLE `propiedadmueble` (
+  `descripcion` varchar(45) NOT NULL,
+  `Propiedad_idPropiedad` int(11) NOT NULL,
+  `Mueble_idMueble` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proveedor`
+--
+
+CREATE TABLE `proveedor` (
+  `idProveedor` int(11) NOT NULL,
+  `personaContacto` varchar(45) NOT NULL,
+  `razonSocial` varchar(100) NOT NULL,
+  `direccion` varchar(45) NOT NULL,
+  `nit` varchar(45) NOT NULL,
+  `img` varchar(45) DEFAULT NULL,
+  `Administrador_idAdministrador` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `telefonoc`
+--
+
+CREATE TABLE `telefonoc` (
+  `idTelefonoC` bigint(20) NOT NULL,
+  `Cliente_idCliente` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `telefonop`
+--
+
+CREATE TABLE `telefonop` (
+  `idTelefonoP` bigint(20) NOT NULL,
+  `Proveedor_idProveedor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `telefonov`
+--
+
+CREATE TABLE `telefonov` (
+  `idTelefonoV` bigint(20) NOT NULL,
+  `Vendedor_idVendedor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo`
+--
+
+CREATE TABLE `tipo` (
+  `idTipo` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo`
+--
+
+INSERT INTO `tipo` (`idTipo`, `nombre`) VALUES
+(1, 'Sofá'),
+(2, 'Silla'),
+(3, 'Mesa de comedor'),
+(4, 'Escritorio'),
+(5, 'Cama'),
+(6, 'Cómoda'),
+(7, 'Armario'),
+(8, 'Estantería'),
+(9, 'Banco'),
+(10, 'Mesa de centro'),
+(11, 'Silla de oficina'),
+(12, 'Mueble para TV'),
+(13, 'Vitrina'),
+(14, 'Perchero'),
+(15, 'Zapatero'),
+(16, 'Tocador'),
+(17, 'Mesita de noche'),
+(18, 'Taburete'),
+(19, 'Cuna'),
+(20, 'Sillón reclinable');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `vendedor`
+--
+
+CREATE TABLE `vendedor` (
+  `idVendedor` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `apellido` varchar(45) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `identificacion` varchar(10) NOT NULL,
+  `clave` varchar(45) NOT NULL,
+  `img` varchar(45) DEFAULT NULL,
+  `Administrador_idAdministrador` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `vendedor`
+--
+
+INSERT INTO `vendedor` (`idVendedor`, `nombre`, `apellido`, `correo`, `identificacion`, `clave`, `img`, `Administrador_idAdministrador`) VALUES
+(1, 'Carlos', 'Mendoza', 'carlos.mendoza@example.com', '1234567890', 'eb52fc9a4b3a81a2000a9e774d5aa515', 'default_perfil.jpg', 1),
+(2, 'Andrea', 'García', 'andrea.garcia@example.com', '0987654321', '380759fb2b96a5904f2a3d4ec571b6ae', 'default_perfil.jpg', 1),
+(3, 'Fernando', 'López', 'fernando.lopez@example.com', '1122334455', '5c7d813ce20d3e16962efd589b7e0549', 'default_perfil.jpg', 2),
+(4, 'Beatriz', 'Martínez', 'beatriz.martinez@example.com', '2233445566', 'b984fe77863037ddeb9be2ad7dfb246e', 'default_perfil.jpg', 2),
+(5, 'Diego', 'Sánchez', 'diego.sanchez@example.com', '3344556677', '6df960c10cdaf092c153a6dd4da0424c', 'default_perfil.jpg', 2),
+(6, 'Mónica', 'Rodríguez', 'monica.rodriguez@example.com', '4455667788', '3114b2a7c2fc9e282d56c3ab6528661e', 'default_perfil.jpg', 1),
+(7, 'Hugo', 'Fernández', 'hugo.fernandez@example.com', '5566778899', '8cac6cee8223173e9c31d814bdf304b7', 'default_perfil.jpg', 1),
+(8, 'Patricia', 'Torres', 'patricia.torres@example.com', '6677889900', '690162610dae5242ca8aebf97720567a', 'default_perfil.jpg', 2),
+(9, 'Ricardo', 'Díaz', 'ricardo.diaz@example.com', '7788990011', '3d33d9a0066f4601054bbbfa0e6ff760', 'default_perfil.jpg', 2),
+(10, 'Valeria', 'Castro', 'valeria.castro@example.com', '8899001122', 'f0e88ab9fb980ece24ebe78179f51246', 'default_perfil.jpg', 1);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `administrador`
+--
+ALTER TABLE `administrador`
+  ADD PRIMARY KEY (`idAdministrador`);
+
+--
+-- Indices de la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  ADD PRIMARY KEY (`idCliente`),
+  ADD KEY `fk_Cliente_Vendedor1_idx` (`Vendedor_idVendedor`);
+
+--
+-- Indices de la tabla `cotizacion`
+--
+ALTER TABLE `cotizacion`
+  ADD PRIMARY KEY (`Cliente_idCliente`,`Vendedor_idVendedor`,`PedidoProveedor_Proveedor_idProveedor`,`PedidoProveedor_Mueble_idMueble`),
+  ADD KEY `fk_Cotizacion_Cliente1_idx` (`Cliente_idCliente`),
+  ADD KEY `fk_Cotizacion_Vendedor1_idx` (`Vendedor_idVendedor`),
+  ADD KEY `fk_Cotizacion_PedidoProveedor1_idx` (`PedidoProveedor_Proveedor_idProveedor`,`PedidoProveedor_Mueble_idMueble`);
+
+--
+-- Indices de la tabla `detallefactura`
+--
+ALTER TABLE `detallefactura`
+  ADD PRIMARY KEY (`Factura_idFactura`,`PedidoProveedor_Proveedor_idProveedor`,`PedidoProveedor_Mueble_idMueble`),
+  ADD KEY `fk_DetalleFactura_Factura1_idx` (`Factura_idFactura`),
+  ADD KEY `fk_DetalleFactura_PedidoProveedor1_idx` (`PedidoProveedor_Proveedor_idProveedor`,`PedidoProveedor_Mueble_idMueble`);
+
+--
+-- Indices de la tabla `factura`
+--
+ALTER TABLE `factura`
+  ADD PRIMARY KEY (`idFactura`),
+  ADD KEY `fk_Factura_Vendedor1_idx` (`Vendedor_idVendedor`),
+  ADD KEY `fk_Factura_Cliente1_idx` (`Cliente_idCliente`);
+
+--
+-- Indices de la tabla `mueble`
+--
+ALTER TABLE `mueble`
+  ADD PRIMARY KEY (`idMueble`),
+  ADD KEY `fk_Mueble_Administrador1_idx` (`Administrador_idAdministrador`),
+  ADD KEY `fk_Mueble_Tipo1_idx` (`Tipo_idTipo`);
+
+--
+-- Indices de la tabla `pedidoproveedor`
+--
+ALTER TABLE `pedidoproveedor`
+  ADD PRIMARY KEY (`Proveedor_idProveedor`,`Mueble_idMueble`),
+  ADD KEY `fk_ProveedorMueble_Mueble1_idx` (`Mueble_idMueble`);
+
+--
+-- Indices de la tabla `propiedad`
+--
+ALTER TABLE `propiedad`
+  ADD PRIMARY KEY (`idPropiedad`),
+  ADD KEY `fk_Propiedad_Tipo1_idx` (`Tipo_idTipo`);
+
+--
+-- Indices de la tabla `propiedadmueble`
+--
+ALTER TABLE `propiedadmueble`
+  ADD PRIMARY KEY (`Propiedad_idPropiedad`,`Mueble_idMueble`),
+  ADD KEY `fk_PropiedadMueble_Mueble1_idx` (`Mueble_idMueble`);
+
+--
+-- Indices de la tabla `proveedor`
+--
+ALTER TABLE `proveedor`
+  ADD PRIMARY KEY (`idProveedor`),
+  ADD KEY `fk_Proveedor_Administrador1_idx` (`Administrador_idAdministrador`);
+
+--
+-- Indices de la tabla `telefonoc`
+--
+ALTER TABLE `telefonoc`
+  ADD PRIMARY KEY (`idTelefonoC`),
+  ADD KEY `fk_TelefonoC_Cliente1_idx` (`Cliente_idCliente`);
+
+--
+-- Indices de la tabla `telefonop`
+--
+ALTER TABLE `telefonop`
+  ADD PRIMARY KEY (`idTelefonoP`),
+  ADD KEY `fk_TelefonoP_Proveedor1_idx` (`Proveedor_idProveedor`);
+
+--
+-- Indices de la tabla `telefonov`
+--
+ALTER TABLE `telefonov`
+  ADD PRIMARY KEY (`idTelefonoV`),
+  ADD KEY `fk_TelefonoV_Vendedor1_idx` (`Vendedor_idVendedor`);
+
+--
+-- Indices de la tabla `tipo`
+--
+ALTER TABLE `tipo`
+  ADD PRIMARY KEY (`idTipo`);
+
+--
+-- Indices de la tabla `vendedor`
+--
+ALTER TABLE `vendedor`
+  ADD PRIMARY KEY (`idVendedor`),
+  ADD KEY `fk_Vendedor_Administrador1_idx` (`Administrador_idAdministrador`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `administrador`
+--
+ALTER TABLE `administrador`
+  MODIFY `idAdministrador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  MODIFY `idCliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `mueble`
+--
+ALTER TABLE `mueble`
+  MODIFY `idMueble` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `propiedad`
+--
+ALTER TABLE `propiedad`
+  MODIFY `idPropiedad` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `proveedor`
+--
+ALTER TABLE `proveedor`
+  MODIFY `idProveedor` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo`
+--
+ALTER TABLE `tipo`
+  MODIFY `idTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  ADD CONSTRAINT `fk_Cliente_Vendedor1` FOREIGN KEY (`Vendedor_idVendedor`) REFERENCES `vendedor` (`idVendedor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `cotizacion`
+--
+ALTER TABLE `cotizacion`
+  ADD CONSTRAINT `fk_Cotizacion_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Cotizacion_PedidoProveedor1` FOREIGN KEY (`PedidoProveedor_Proveedor_idProveedor`,`PedidoProveedor_Mueble_idMueble`) REFERENCES `pedidoproveedor` (`Proveedor_idProveedor`, `Mueble_idMueble`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Cotizacion_Vendedor1` FOREIGN KEY (`Vendedor_idVendedor`) REFERENCES `vendedor` (`idVendedor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `detallefactura`
+--
+ALTER TABLE `detallefactura`
+  ADD CONSTRAINT `fk_DetalleFactura_Factura1` FOREIGN KEY (`Factura_idFactura`) REFERENCES `factura` (`idFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_DetalleFactura_PedidoProveedor1` FOREIGN KEY (`PedidoProveedor_Proveedor_idProveedor`,`PedidoProveedor_Mueble_idMueble`) REFERENCES `pedidoproveedor` (`Proveedor_idProveedor`, `Mueble_idMueble`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `factura`
+--
+ALTER TABLE `factura`
+  ADD CONSTRAINT `fk_Factura_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Factura_Vendedor1` FOREIGN KEY (`Vendedor_idVendedor`) REFERENCES `vendedor` (`idVendedor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `mueble`
+--
+ALTER TABLE `mueble`
+  ADD CONSTRAINT `fk_Mueble_Administrador1` FOREIGN KEY (`Administrador_idAdministrador`) REFERENCES `administrador` (`idAdministrador`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Mueble_Tipo1` FOREIGN KEY (`Tipo_idTipo`) REFERENCES `tipo` (`idTipo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `pedidoproveedor`
+--
+ALTER TABLE `pedidoproveedor`
+  ADD CONSTRAINT `fk_ProveedorMueble_Mueble1` FOREIGN KEY (`Mueble_idMueble`) REFERENCES `mueble` (`idMueble`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ProveedorMueble_Proveedor` FOREIGN KEY (`Proveedor_idProveedor`) REFERENCES `proveedor` (`idProveedor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `propiedad`
+--
+ALTER TABLE `propiedad`
+  ADD CONSTRAINT `fk_Propiedad_Tipo1` FOREIGN KEY (`Tipo_idTipo`) REFERENCES `tipo` (`idTipo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `propiedadmueble`
+--
+ALTER TABLE `propiedadmueble`
+  ADD CONSTRAINT `fk_PropiedadMueble_Mueble1` FOREIGN KEY (`Mueble_idMueble`) REFERENCES `mueble` (`idMueble`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_PropiedadMueble_Propiedad1` FOREIGN KEY (`Propiedad_idPropiedad`) REFERENCES `propiedad` (`idPropiedad`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `proveedor`
+--
+ALTER TABLE `proveedor`
+  ADD CONSTRAINT `fk_Proveedor_Administrador1` FOREIGN KEY (`Administrador_idAdministrador`) REFERENCES `administrador` (`idAdministrador`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `telefonoc`
+--
+ALTER TABLE `telefonoc`
+  ADD CONSTRAINT `fk_TelefonoC_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `telefonop`
+--
+ALTER TABLE `telefonop`
+  ADD CONSTRAINT `fk_TelefonoP_Proveedor1` FOREIGN KEY (`Proveedor_idProveedor`) REFERENCES `proveedor` (`idProveedor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `telefonov`
+--
+ALTER TABLE `telefonov`
+  ADD CONSTRAINT `fk_TelefonoV_Vendedor1` FOREIGN KEY (`Vendedor_idVendedor`) REFERENCES `vendedor` (`idVendedor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `vendedor`
+--
+ALTER TABLE `vendedor`
+  ADD CONSTRAINT `fk_Vendedor_Administrador1` FOREIGN KEY (`Administrador_idAdministrador`) REFERENCES `administrador` (`idAdministrador`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

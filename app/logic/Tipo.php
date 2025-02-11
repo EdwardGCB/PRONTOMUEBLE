@@ -32,5 +32,33 @@ class Tipo{
         $this->nombre = $tipoDAO->consultarPorId();
         $conexion->cerrarConexion();
     }
+
+    public function consultarPorNombre(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $tipoDAO = new TipoDAO(null, $this->nombre);
+        $conexion->ejecutarConsulta($tipoDAO -> consultarPorNombre());
+        $tipos = array();
+        while($registro = $conexion->siguienteRegistro()){
+            $tipo = new Tipo($registro[0], $registro[1]);
+            array_push($tipos, $tipo);
+        }
+        $conexion->cerrarConexion();
+        return $tipos;
+    }
+
+    public function consultarTodos(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $tipoDAO = new TipoDAO();
+        $conexion->ejecutarConsulta($tipoDAO -> consultarTodos());
+        $tipos = array();
+        while($registro = $conexion->siguienteRegistro()){
+            $tipo = new Tipo($registro[0], $registro[1]);
+            array_push($tipos, $tipo);
+        }
+        $conexion->cerrarConexion();
+        return $tipos;
+    }
 }
 ?>

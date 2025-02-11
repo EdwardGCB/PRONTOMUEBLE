@@ -93,7 +93,7 @@ class Proveedor{
                 $administrador = new Administrador($registro[5]);
                 $administrador->consultarPorId();
             }
-            $telefono = new Telefono($registro[0]);
+            $telefono = new Telefono(null, $registro[0]);
             $telefonos = $telefono->consultarNumerosProveedor(); 
             $proveedor = new Proveedor($registro[0], $registro[1], $registro[2], $registro[3], 
             $registro[4], $administrador, $telefonos);

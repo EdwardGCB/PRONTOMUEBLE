@@ -21,7 +21,10 @@ class PedidoProveedorDAO{
     }
 
     public function buscarNombreMueble(){
-        return "";
+        return "SELECT cantidadPost, cantidadPre, precio, precioFinal, Proveedor_idProveedor, Mueble_idMueble
+                FROM PedidoProveedor JOIN Mueble ON (Mueble_idMueble = idMueble)
+                WHERE nombre LIKE '%".$this->mueble->getNombre()."%'
+        ";
     }
 }
 ?>

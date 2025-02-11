@@ -1,15 +1,21 @@
 <?php
 $items = array();
-if(isset($_GET['tipo'])){
+if (isset($_GET['tipo'])) {
     $tipo = $_GET['tipo'];
-    if($tipo == "clientes"){
+    if ($tipo == "clientes") {
         $cliente = new Cliente(null, $_GET['filtro']);
-        $arreglo = $cliente->consultarPorNombre();
+        $items = $cliente->consultarPorNombre();
+    }else if ($tipo == "vendedores"){
+        $vendedor = new Vendedor(null, $_GET['filtro']);
+        $items = $vendedor->consultarPorNombre();
+    }else{
+        $proveedor = new Proveedor(null, $_GET['filtro']);
+        $items = $proveedor->consultarPorRazonSocial();
     }
 }
 
 // Definir cantidad de eventos por página
-$itemsPorPagina = 10;
+$itemsPorPagina = 9;
 $totalItems = count($items);
 $paginas = ceil($totalItems / $itemsPorPagina);
 
@@ -19,33 +25,39 @@ $paginaActual = max(1, min($paginaActual, $paginas));
 
 // Obtener eventos de la página actual
 $inicio = ($paginaActual - 1) * $itemsPorPagina;
-$clientesPagina = array_slice($items, $inicio, $itemsPorPagina);
+$itemsPagina = array_slice($items, $inicio, $itemsPorPagina);
 ?>
 
 <table class="table table-striped">
     <thead>
         <tr>
             <th>#</th>
-            <?= ($tipo != "proveedores")? "<th>nombre</th>" : "<th>Razon social</th>" ?>
-            <?= ($tipo != "proveedores")? "<th>Identificacion</th>" : "<th>Nit</th>" ?>
-            <th>Fecha Creacion</th>
-            <th>Asesor</th>
+            <?= ($tipo != "proveedores") ? "<th>nombre</th>" : "<th>Razon social</th>" ?>
+            <?= ($tipo != "proveedores") ? "<th>Identificacion</th>" : "<th>Nit</th>" ?>
+            <?= ($tipo != "proveedores") ? "<th>Correo</th>" : "<th>Persona Contacto</th>" ?>
+            <?= ($tipo == "clientes") ? "<th>Fecha Creacion</th>" : (($tipo == "vendedores") ? "" : "<th>Direccion</th>") ?>
+            <?= ($tipo == "clientes") ? "<th>Asesor</th>" : "" ?>
             <th>Telefonos</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($clientesPagina as $clienteActual) { ?>
+        <?php foreach ($itemsPagina as $itemActual) { ?>
             <tr>
-                <th><?= $clienteActual->getIdPersona() ?></th>
-                <th><?= $clienteActual->getNombres() . " " . $clienteActual->getApellidos() ?></th>
-                <td><?= $clienteActual->getIdentificacion() ?></td>
-                <td><?= $clienteActual->getFecha_ini() ?></td>
-                <td><?= $clienteActual->getAsesor()->getIdPersona() . "-" .  $clienteActual->getAsesor()->getNombres() . " " .  $clienteActual->getAsesor()->getApellidos() ?></td>
+                <th><?= ($tipo != "proveedores") ?  $itemActual->getIdPersona() :  $itemActual->getIdProveedor() ?></th>
+                <th><?= ($tipo != "proveedores") ? $itemActual->getNombres() . " " . $itemActual->getApellidos() : $itemActual->getRazonSocial() ?></th>
+                <td><?= ($tipo != "proveedores") ? $itemActual->getIdentificacion() : $itemActual->getNit() ?></td>
+                <td><?= ($tipo != "proveedores") ? $itemActual->getCorreo() : $itemActual->getPersonaContacto() ?></td>
+                <?= ($tipo == "clientes") ? "<td>".$itemActual->getFecha_ini()."</td>" : (($tipo == "vendedores") ? "" : "<td>".$itemActual->getDireccion()."</td>") ?>
+                <?php if ($tipo == "clientes") {
+                    echo "<td>" . $itemActual->getAsesor()->getIdPersona() . "-" .  $itemActual->getAsesor()->getNombres() . " " .  $itemActual->getAsesor()->getApellidos() . "</td>";
+                } else {
+                    echo "";
+                }  ?>
                 <td>
                 </td>
                 <td>
-                    <a href='?pid=<?= base64_encode("paginas/editClient.php") ?>&id=<?= $clienteActual->getIdPersona() ?>' class='btn btn-success' style='color: white;'>
+                    <a href='?pid=<?= base64_encode("paginas/editClient.php") ?>&id=<?= ($tipo != "proveedores") ? $itemActual->getIdPersona() : $itemActual->getIdProveedor() ?>' class='btn btn-success' style='color: white;'>
                         <span class='material-symbols-rounded'>edit</span>
                     </a>
                 </td>
