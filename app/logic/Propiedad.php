@@ -44,6 +44,7 @@ class Propiedad{
             }else{
                 $tipo = new Tipo($registro[2]);
                 $tipo->consultarPorId();
+                $tipos[$registro[2]] = $tipo;
             }
             $propiedad = new Propiedad($registro[0], $registro[1], $tipo);
             array_push($propiedades, $propiedad);

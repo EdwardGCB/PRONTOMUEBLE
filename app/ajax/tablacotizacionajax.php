@@ -32,13 +32,7 @@
                     </td>
                     <td><input type="text" class="form-control tipoProducto" readonly></td>
                     <td><input type="text" class="form-control descripcion" readonly></td>
-                    <select class='form-select' name='product-provideer' required>
-                        <option value='-1'>Seleccione...</option>";
-                        foreach ($tipos as $tipoActual) {
-                            $campos .= '<option value=' . $tipoActual->getIdTipo() . '>' . $tipoActual->getNombre() . '</option>';
-                        }
-                        $campos .= "
-                    </select>
+                    <td></td>
                     <td><input type="number" class="form-control cantidad" value="1" min="1"></td>
                     <td><input type="number" class="form-control precio" readonly></td>
                     <td>
@@ -55,6 +49,7 @@
             var searchTerm = inputProducto.val();
             var fila = inputProducto.closest("td");
             var suggestionsBox = fila.find(".suggestions-box");
+            var proveedorSelect = fila.find(".product-provideer");
 
             if (searchTerm.length === 0) {
                 suggestionsBox.empty().hide();
@@ -76,7 +71,7 @@
 
                     var opciones = productos.map(p => `
                         <div class="suggestion-item" 
-                            data-id="${p.id}"    
+                            data-id="${p.id}"
                             data-nombre="${p.nombre}" 
                             data-tipo="${p.tipo}"
                             data-descripcion="${p.descripcion}"

@@ -32,5 +32,12 @@ class PedidoProveedorDAO{
                 VALUES ($this->cantidadPost, $this->cantidadPre, $this->precio, $this->ganancia, $this->precioFinal, ".$this->proveedor->getIdProveedor().", ".$this->mueble->getIdMueble().")
         ";
     }
+
+    public function buscarPorIdMueble(){
+        return "SELECT cantidadPost, cantidadPre, precio, ganancia, precioFinal, Proveedor_idProveedor
+                FROM PedidoProveedor
+                WHERE Mueble_idMueble = ".$this->mueble->getIdMueble()."
+        ";
+    }
 }
 ?>

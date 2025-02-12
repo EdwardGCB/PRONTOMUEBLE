@@ -81,6 +81,22 @@ class PedidoProveedor
         $this->mueble = $mueble;
     }
 
+    public function buscarPorIdMueble(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $proveedores = array();
+        $pedidoProveedorDAO = new PedidoProveedorDAO(null, null, null, null, 
+        null, null,$this->mueble);
+        $conexion->ejecutarConsulta($pedidoProveedorDAO->buscarPorIdMueble());
+        while($resultado = $conexion->siguienteRegistro()){
+            $proveedor = new Proveedor($resultado[5]);
+            $pedidoProveedor = new PedidoProveedor($resultado[0], $resultado[1], $resultado[2], $resultado[3], 
+            $resultado[4], $proveedor, null);
+            array_push($proveedores, $pedidoProveedor);
+        }
+        $conexion->cerrarConexion();
+        return $proveedores;
+    }
     public function buscarNombreMueble()
     {
         $conexion = new Conexion();
