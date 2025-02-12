@@ -5,6 +5,7 @@ class Cliente extends Persona
     private $asesor;
 
     private $telefonos;
+    private $totalCompras;
 
     public function getFecha_ini()
     {
@@ -30,23 +31,20 @@ class Cliente extends Persona
     {
         $this->telefonos = $telefonos;
     }
+    public function getTotalCompras(){
+        return $this->totalCompras;
+    }
+    public function setTotalCompras($totalCompras){
+        $this->totalCompras = $totalCompras;
+    }
 
-    public function __construct($idPersona = 0, $nombres = "", $apellidos = "", $identificacion = 0, $img = "", $correo = "", $fecha_ini = "", $asesor = null, $telefonos = null)
+    public function __construct($idPersona = 0, $nombres = "", $apellidos = "", $identificacion = 0, $img = "", $correo = "", $fecha_ini = "", $asesor = null, $telefonos = null, $totalCompras=0)
     {
         parent::__construct($idPersona, $nombres, $apellidos, $identificacion, $img, $correo);
         $this->fecha_ini = $fecha_ini;
         $this->asesor = $asesor;
         $this->telefonos = $telefonos;
-    }
-
-    public function crearCliente()
-    {
-        $conexion = new Conexion();
-        $conexion->abrirConexion();
-        $clienteDAO = new ClienteDAO(null, $this->nombres, $this->apellidos, $this->identificacion, $this->img, $this->fecha_ini, $this->asesor, $this->telefonos);
-        $conexion->ejecutarConsulta($clienteDAO->crearCliente());
-        $this->idPersona = $conexion->obtenerLlaveAutonumerica();
-        $conexion->cerrarConexion();
+        $this->totalCompras = $totalCompras;
     }
 
     public function consultarCliente()
@@ -75,15 +73,6 @@ class Cliente extends Persona
         }
     }
 
-    public function actualizarCliente()
-    {
-        $conexion = new Conexion();
-        $conexion->abrirConexion();
-        $clienteDAO = new ClienteDAO($this->idPersona, $this->nombres, $this->apellidos, $this->identificacion, $this->img, $this->fecha_ini, $this->asesor, $this->telefonos);
-        $conexion->ejecutarConsulta($clienteDAO->actualizarCliente());
-        $conexion->cerrarConexion();
-    }
-
     public function consultarTodosClientes()
     {
         $conexion = new Conexion();
@@ -100,7 +89,7 @@ class Cliente extends Persona
                 $asesor = new Vendedor($registro[6]);
                 $asesor->consultarPorId();
             }
-            $telefono = new Telefono(null,$registro[0]);
+            $telefono = new Telefono(null, $registro[0]);
             $telefonos = $telefono->consultarNumerosCliente();
             $cliente = new Cliente($registro[0], $registro[1], $registro[2], $registro[3], $registro[4], $registro[5], $asesor, $telefonos);
             array_push($clientes, $cliente);
@@ -109,38 +98,63 @@ class Cliente extends Persona
         return $clientes;
     }
 
-    public function consultarPorNombre(){
+    public function consultarPorNombre()
+    {
         $conexion = new Conexion();
         $conexion->abrirConexion();
-        $clienteDAO = new ClienteDAO(null,$this->nombres);
+        $clienteDAO = new ClienteDAO(null, $this->nombres);
         $conexion->ejecutarConsulta($clienteDAO->consultarPorNombre());
         $asesores = array();
         $clientes = array();
-        while($registro = $conexion->siguienteRegistro()){
+        while ($registro = $conexion->siguienteRegistro()) {
             $asesor = null;
-            if(array_key_exists($registro[6], $asesores)){
+            if (array_key_exists($registro[6], $asesores)) {
                 $asesor = $asesores[$registro[6]];
             } else {
                 $asesor = new Vendedor($registro[6]);
                 $asesor->consultarPorId();
             }
-            $telefono = new Telefono(null,$registro[0]);
+            $telefono = new Telefono(null, $registro[0]);
             $telefonos = $telefono->consultarNumerosCliente();
-            $cliente = new Cliente($registro[0], $registro[1], $registro[2], $registro[3], 
-            null,$registro[4], $registro[5], $asesor, $telefonos);
+            $cliente = new Cliente(
+                $registro[0],
+                $registro[1],
+                $registro[2],
+                $registro[3],
+                null,
+                $registro[4],
+                $registro[5],
+                $asesor,
+                $telefonos
+            );
             array_push($clientes, $cliente);
         }
         $conexion->cerrarConexion();
         return $clientes;
     }
 
-    public function guardar(){
+    public function guardar()
+    {
         $conexion = new Conexion();
         $conexion->abrirConexion();
-        $clienteDAO = new ClienteDAO(null, $this->nombres, $this->apellidos, $this->identificacion, null,$this->correo, $this->fecha_ini, $this->asesor);
+        $clienteDAO = new ClienteDAO(null, $this->nombres, $this->apellidos, $this->identificacion, null, $this->correo, $this->fecha_ini, $this->asesor);
         $conexion->ejecutarConsulta($clienteDAO->guardar());
         $this->idPersona = $conexion->obtenerLlaveAutonumerica();
         $conexion->cerrarConexion();
         return $this->idPersona;
+    }
+
+    public function clienteMasCompras(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $clienteDAO = new ClienteDAO();
+        $conexion->ejecutarConsulta($clienteDAO->clienteMasCompras());
+        $clientes = array();
+        while (($registro = $conexion->siguienteRegistro())!= null) {
+            $cliente = new Cliente($registro[0], $registro[1], $registro[2],  null, null,null,null,null,null,$registro[3]);
+            array_push($clientes, $cliente);
+        }
+        $conexion->cerrarConexion();
+        return $clientes;
     }
 }

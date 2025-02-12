@@ -40,4 +40,14 @@ class MuebleDAO
                 VALUES ('$this->nombre', '$this->descripcio', 'defaul.png', $this->administrador, $this->tipo)
         ";
     }
+
+    public function productosMasVendidos(){
+        return "SELECT m.idMueble, m.nombre,
+                    (SELECT SUM(df.cantidad) 
+                    FROM DetalleFactura df 
+                    WHERE df.PedidoProveedor_Mueble_idMueble = m.idMueble) AS total_vendido
+                FROM Mueble m
+                ORDER BY total_vendido DESC
+                LIMIT 5";
+    }
 }

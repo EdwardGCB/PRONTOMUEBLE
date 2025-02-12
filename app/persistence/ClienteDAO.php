@@ -13,9 +13,11 @@ class ClienteDAO
 
     private $telefonos;
 
+    private $totalCompras;
 
 
-    public function __construct($idPersona = 0, $nombres = "", $apellidos = "", $identificacion = 0, $img = "", $correo = "", $fecha_ini = "", $asesor = null, $telefonos = null)
+
+    public function __construct($idPersona = 0, $nombres = "", $apellidos = "", $identificacion = 0, $img = "", $correo = "", $fecha_ini = "", $asesor = null, $telefonos = null, $totalCompras = 0)
     {
         $this->idPersona = $idPersona;
         $this->nombres = $nombres;
@@ -26,6 +28,7 @@ class ClienteDAO
         $this->fecha_ini = $fecha_ini;
         $this->asesor = $asesor;
         $this->telefonos = $telefonos;
+        $this->totalCompras = $totalCompras;
     }
 
     public function consultarPorNombre()
@@ -42,8 +45,21 @@ class ClienteDAO
                 FROM cliente";
     }
 
-    public function guardar(){
+    public function guardar()
+    {
         return "INSERT INTO cliente (nombre, apellido, identificacion, correo, fechaCreacion, Vendedor_idVendedor)
-                VALUES ('".$this->nombres."', '".$this->apellidos."', ".$this->identificacion.", '".$this->correo."', CURDATE(), ".$this->asesor.")";
+                VALUES ('" . $this->nombres . "', '" . $this->apellidos . "', " . $this->identificacion . ", '" . $this->correo . "', CURDATE(), " . $this->asesor . ")";
+    }
+
+    public function clienteMasCompras()
+    {
+        return "SELECT c.idCliente, c.nombre, c.apellido,
+                    (SELECT SUM(f.total) 
+                    FROM Factura f 
+                    WHERE f.Cliente_idCliente = c.idCliente) AS total_compras
+                FROM Cliente c
+                ORDER BY total_compras DESC
+                LIMIT 10
+                ";
     }
 }

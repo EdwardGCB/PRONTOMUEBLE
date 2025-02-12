@@ -4,6 +4,8 @@ class Vendedor extends Persona{
     private $telefonos;
     private $password;
 
+    private $cantVentas;
+
     public function getAdministrador() {
         return $this->administrador;
     }
@@ -16,18 +18,26 @@ class Vendedor extends Persona{
     public function setTelefonos($telefonos){
         $this->telefonos = $telefonos;
     }
+
     public function getPassword(){
         return $this->password;
     }
     public function setPassword($password){
         $this->password = $password;
     }
+    public function getCantVentas(){
+        return $this->cantVentas;
+    }
+    public function setCantVentas($cantVentas){
+        $this->cantVentas = $cantVentas;
+    }
 
-    public function __construct($idPersona = 0, $nombres = "", $apellidos = "", $identificacion = 0, $img = "", $correo = "", $telefonos = null, $password = "", $administrador = null){
+    public function __construct($idPersona = 0, $nombres = "", $apellidos = "", $identificacion = 0, $img = "", $correo = "", $telefonos = null, $password = "", $administrador = null, $cantVentas =0){
         parent::__construct($idPersona, $nombres, $apellidos, $identificacion, $img, $correo);
         $this->administrador = $administrador;
         $this->telefonos = $telefonos;
         $this->password = $password;
+        $this->cantVentas = $cantVentas;
     }
 
     public function autenticar(){
@@ -106,6 +116,20 @@ class Vendedor extends Persona{
         $resultado = $conexion->obtenerLlaveAutonumerica();
         $conexion->cerrarConexion();
         return $resultado;
+    }
+
+    public function ventasMensuales(){
+        $vendedores = array();
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $sellerDAO = new VendedorDAO();
+        $conexion->ejecutarConsulta($sellerDAO -> ventasMensuales());
+        while($resultado = $conexion->siguienteRegistro()){
+            $vendedor = new Vendedor($resultado[0], $resultado[1], null,null,null,null,null,null,null,$resultado[2]);
+            array_push($vendedores, $vendedor);
+        }
+        $conexion->cerrarConexion();
+        return $vendedores;
     }
 }
 ?>

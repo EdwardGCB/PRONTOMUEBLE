@@ -10,6 +10,8 @@ class Mueble{
     private $propiedades;
     private $administrador;
 
+    private $cantVendida;
+
     public function getIdMueble(){
         return $this->idMueble;
     }
@@ -52,7 +54,13 @@ class Mueble{
     public function setImg($img){
         $this->img = $img;
     }
-    public function __construct($idMueble=0, $nombre="", $descripcio="", $img="", $tipo=null, $propiedades=null, $administrador=null) {
+    public function getCantVendida(){
+        return $this->cantVendida;
+    }
+    public function setCantVendida($cantVendida){
+        $this->cantVendida = $cantVendida;
+    }
+    public function __construct($idMueble=0, $nombre="", $descripcio="", $img="", $tipo=null, $propiedades=null, $administrador=null, $cantVendida=0) {
         $this->idMueble = $idMueble;
         $this->nombre = $nombre;
         $this->descripcio = $descripcio;
@@ -60,6 +68,7 @@ class Mueble{
         $this->tipo = $tipo;
         $this->propiedades = $propiedades;
         $this->administrador = $administrador;
+        $this->cantVendida = $cantVendida;
     }
 
     public function consultarPorId(){
@@ -112,6 +121,21 @@ class Mueble{
         }
         $conexion->cerrarConexion();
         return true;
+    }
+
+    public function productosMasVendidos(){
+        $muebLes=array();
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $muebleDAO = new MuebleDAO();
+        $conexion->ejecutarConsulta($muebleDAO -> productosMasVendidos());
+        $muebles = array();
+        while($registro = $conexion->siguienteRegistro()){
+            $mueble = new Mueble($registro[0], $registro[1], null,null,null,null,null,$registro[3]);
+            array_push($muebles, $mueble);
+        }
+        $conexion->cerrarConexion();
+        return $muebles;
     }
 }
 ?>

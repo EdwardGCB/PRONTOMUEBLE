@@ -11,6 +11,7 @@ class Proveedor{
     private $administrator;
 
     private $telefonos;
+    private $cantPedidos;
 
     public function getIdProveedor(){
         return $this->idProveedor;
@@ -54,7 +55,13 @@ class Proveedor{
     public function setTelefonos($telefonos){
         $this->telefonos = $telefonos;
     }
-    public function __construct($idProveedor=0, $razonSocial="", $direccion="", $nit="", $personaContacto="", $administrator=null, $telefonos=null) {
+    public function getCantPedidos(){
+        return $this->cantPedidos;
+    }
+    public function setCantPedidos($cantPedidos){
+        $this->cantPedidos = $cantPedidos;
+    }
+    public function __construct($idProveedor=0, $razonSocial="", $direccion="", $nit="", $personaContacto="", $administrator=null, $telefonos=null, $cantidadPedidos=0) {
         $this->idProveedor = $idProveedor;
         $this->razonSocial = $razonSocial;
         $this->direccion = $direccion;
@@ -62,6 +69,7 @@ class Proveedor{
         $this->personaContacto = $personaContacto;
         $this->administrator = $administrator;
         $this->telefonos = $telefonos;
+        $this->cantPedidos = $cantidadPedidos;
     }
 
     public function consultarTodos(){
@@ -131,6 +139,20 @@ class Proveedor{
         $resultado = $conexion->obtenerLlaveAutonumerica(); 
         $conexion->cerrarConexion();
         return $resultado;
+    }
+
+    public function cantidadPedidos(){
+        $proveedores = array();
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $proveedorDAO = new ProveedorDAO();
+        $conexion->ejecutarConsulta($proveedorDAO->cantidadPedidos());
+        while($registro = $conexion->siguienteRegistro()){
+            $proveedor = new Proveedor($registro[0], $registro[1], null, null, null, null, null, $registro[2]);
+            array_push($proveedores, $proveedor);
+        }
+        $conexion->cerrarConexion();
+        return $proveedores;
     }
 }
 ?>
