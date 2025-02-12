@@ -1,4 +1,7 @@
 <?php
+
+require_once 'Persona.php';
+
 class Cliente extends Persona
 {
     private $fecha_ini;
@@ -39,7 +42,7 @@ class Cliente extends Persona
         $this->telefonos = $telefonos;
     }
 
-    public function crearCliente()
+    /*public function crearCliente()
     {
         $conexion = new Conexion();
         $conexion->abrirConexion();
@@ -47,9 +50,9 @@ class Cliente extends Persona
         $conexion->ejecutarConsulta($clienteDAO->crearCliente());
         $this->idPersona = $conexion->obtenerLlaveAutonumerica();
         $conexion->cerrarConexion();
-    }
+    }*/
 
-    public function consultarCliente()
+    /*public function consultarCliente()
     {
         $conexion = new Conexion();
         $conexion->abrirConexion();
@@ -73,16 +76,16 @@ class Cliente extends Persona
             $conexion->cerrarConexion();
             return true;
         }
-    }
+    }*/
 
-    public function actualizarCliente()
+    /*public function actualizarCliente()
     {
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $clienteDAO = new ClienteDAO($this->idPersona, $this->nombres, $this->apellidos, $this->identificacion, $this->img, $this->fecha_ini, $this->asesor, $this->telefonos);
         $conexion->ejecutarConsulta($clienteDAO->actualizarCliente());
         $conexion->cerrarConexion();
-    }
+    }*/
 
     public function consultarTodosClientes()
     {
@@ -100,7 +103,7 @@ class Cliente extends Persona
                 $asesor = new Vendedor($registro[6]);
                 $asesor->consultarPorId();
             }
-            $telefono = new Telefono(null,$registro[0]);
+            $telefono = new Telefono(null, $registro[0]);
             $telefonos = $telefono->consultarNumerosCliente();
             $cliente = new Cliente($registro[0], $registro[1], $registro[2], $registro[3], $registro[4], $registro[5], $asesor, $telefonos);
             array_push($clientes, $cliente);
@@ -109,28 +112,60 @@ class Cliente extends Persona
         return $clientes;
     }
 
-    public function consultarPorNombre(){
+    public function consultarPorNombre()
+    {
         $conexion = new Conexion();
         $conexion->abrirConexion();
-        $clienteDAO = new ClienteDAO(null,$this->nombres);
+        $clienteDAO = new ClienteDAO(null, $this->nombres);
         $conexion->ejecutarConsulta($clienteDAO->consultarPorNombre());
         $asesores = array();
         $clientes = array();
-        while($registro = $conexion->siguienteRegistro()){
+        while ($registro = $conexion->siguienteRegistro()) {
             $asesor = null;
-            if(array_key_exists($registro[6], $asesores)){
+            if (array_key_exists($registro[6], $asesores)) {
                 $asesor = $asesores[$registro[6]];
             } else {
                 $asesor = new Vendedor($registro[6]);
                 $asesor->consultarPorId();
             }
-            $telefono = new Telefono(null,$registro[0]);
+            $telefono = new Telefono(null, $registro[0]);
             $telefonos = $telefono->consultarNumerosCliente();
-            $cliente = new Cliente($registro[0], $registro[1], $registro[2], $registro[3], 
-            null,$registro[4], $registro[5], $asesor, $telefonos);
+            $cliente = new Cliente(
+                $registro[0],
+                $registro[1],
+                $registro[2],
+                $registro[3],
+                null,
+                $registro[4],
+                $registro[5],
+                $asesor,
+                $telefonos
+            );
             array_push($clientes, $cliente);
         }
         $conexion->cerrarConexion();
         return $clientes;
+    }
+
+    public function consultarPorCedula()
+    {
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $clienteDAO = new ClienteDAO(null, null, null, $this->identificacion);
+        $conexion->ejecutarConsulta($clienteDAO->consultarPorCedula());
+        if ($conexion->numeroFilas() == 0) {
+            echo "prueba";
+            $conexion->cerrarConexion();
+            return false;
+        }
+        $registro = $conexion->siguienteRegistro();
+
+        $this->idPersona=$registro[0];
+        $this->nombres=$registro[1];
+        $this->apellidos=$registro[2];
+        $this->correo=$registro[3];
+
+        $conexion->cerrarConexion();
+        return true;
     }
 }
