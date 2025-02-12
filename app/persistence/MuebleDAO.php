@@ -34,6 +34,11 @@ class MuebleDAO
                 WHERE nombre LIKE '%$this->nombre%'
         ";
     }
+    public function consultarTodos(){
+        return "SELECT idMueble, nombre, descripcion
+                FROM mueble
+        ";
+    }
 
     public function guardar(){
         return "INSERT INTO mueble (nombre, descripcion, img, Administrador_idAdministrador, Tipo_idTipo)

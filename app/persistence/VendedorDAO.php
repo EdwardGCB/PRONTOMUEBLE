@@ -46,4 +46,9 @@ class VendedorDAO
                 FROM vendedor
                 WHERE nombre LIKE '%" . $this->nombres . "%'";
     }
+    public function consultarTodos(){
+        return "SELECT idVendedor, nombre, apellido, correo, identificacion
+                FROM vendedor
+        ";
+    }
 }

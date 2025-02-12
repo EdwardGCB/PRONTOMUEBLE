@@ -1,7 +1,8 @@
 <?php
-require_once (__DIR__.'../../persistence/Conexion.php');
-require_once (__DIR__.'../../persistence/MuebleDAO.php');
-class Mueble{
+require_once(__DIR__ . '../../persistence/Conexion.php');
+require_once(__DIR__ . '../../persistence/MuebleDAO.php');
+class Mueble
+{
     private $idMueble;
     private $nombre;
     private $descripcio;
@@ -10,49 +11,64 @@ class Mueble{
     private $propiedades;
     private $administrador;
 
-    public function getIdMueble(){
+    public function getIdMueble()
+    {
         return $this->idMueble;
     }
-    public function setIdMueble($idMueble){
+    public function setIdMueble($idMueble)
+    {
         $this->idMueble = $idMueble;
     }
-    public function getNombre(){
+    public function getNombre()
+    {
         return $this->nombre;
     }
-    public function setNombre($nombre){
+    public function setNombre($nombre)
+    {
         $this->nombre = $nombre;
     }
-    public function getDescripcio(){
+    public function getDescripcio()
+    {
         return $this->descripcio;
     }
-    public function setDescripcio($descripcio){
+    public function setDescripcio($descripcio)
+    {
         $this->descripcio = $descripcio;
     }
-    public function getTipo(){
+    public function getTipo()
+    {
         return $this->tipo;
     }
-    public function setTipo($tipo){
+    public function setTipo($tipo)
+    {
         $this->tipo = $tipo;
     }
-    public function getPropiedades(){
+    public function getPropiedades()
+    {
         return $this->propiedades;
     }
-    public function setPropiedades($propiedades){
+    public function setPropiedades($propiedades)
+    {
         $this->propiedades = $propiedades;
     }
-    public function getAdministrador(){
+    public function getAdministrador()
+    {
         return $this->administrador;
     }
-    public function setAdministrador($administrador){
+    public function setAdministrador($administrador)
+    {
         $this->administrador = $administrador;
     }
-    public function getImg(){
+    public function getImg()
+    {
         return $this->img;
     }
-    public function setImg($img){
+    public function setImg($img)
+    {
         $this->img = $img;
     }
-    public function __construct($idMueble=0, $nombre="", $descripcio="", $img="", $tipo=null, $propiedades=null, $administrador=null) {
+    public function __construct($idMueble = 0, $nombre = "", $descripcio = "", $img = "", $tipo = null, $propiedades = null, $administrador = null)
+    {
         $this->idMueble = $idMueble;
         $this->nombre = $nombre;
         $this->descripcio = $descripcio;
@@ -62,13 +78,14 @@ class Mueble{
         $this->administrador = $administrador;
     }
 
-    public function consultarPorId(){
+    public function consultarPorId()
+    {
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $muebleDAO = new MuebleDAO($this->idMueble);
-        $conexion->ejecutarConsulta($muebleDAO -> consultarPorId());
+        $conexion->ejecutarConsulta($muebleDAO->consultarPorId());
         $registro = $conexion->siguienteRegistro();
-        if($conexion->numeroFilas() == 0){
+        if ($conexion->numeroFilas() == 0) {
             $conexion->cerrarConexion();
             return false;
         }
@@ -85,13 +102,14 @@ class Mueble{
         return true;
     }
 
-    public function buscarPorNombre(){
+    public function buscarPorNombre()
+    {
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $muebleDAO = new MuebleDAO(null, $this->nombre);
-        $conexion->ejecutarConsulta($muebleDAO -> buscarPorNombre());
+        $conexion->ejecutarConsulta($muebleDAO->buscarPorNombre());
         $muebles = array();
-        while($registro = $conexion->siguienteRegistro()){
+        while ($registro = $conexion->siguienteRegistro()) {
             $mueble = new Mueble($registro[0]);
             $mueble->consultarPorId();
             array_push($muebles, $mueble);
@@ -100,13 +118,32 @@ class Mueble{
         return $muebles;
     }
 
-    public function guardar(){
+    public function consultarTodos()
+    {
         $conexion = new Conexion();
         $conexion->abrirConexion();
-        $muebleDAO = new MuebleDAO( null, $this->nombre, $this->descripcio, $this->img,$this->tipo,  null, $this->administrador);
-        $conexion->ejecutarConsulta($muebleDAO -> guardar());
+
+        $muebleDAO = new MuebleDAO();
+        $conexion->ejecutarConsulta($muebleDAO->consultarTodos());
+
+        $muebles = array();
+        while ($registro = $conexion->siguienteRegistro()) {
+            $mueble = new Mueble($registro[0], $registro[1], $registro[2]);
+            array_push($muebles, $mueble); 
+        }
+        $conexion->cerrarConexion();
+        return $muebles;
+    }
+
+
+    public function guardar()
+    {
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $muebleDAO = new MuebleDAO(null, $this->nombre, $this->descripcio, $this->img, $this->tipo, null, $this->administrador);
+        $conexion->ejecutarConsulta($muebleDAO->guardar());
         $this->idMueble = $conexion->obtenerLlaveAutonumerica();
-        if($this->idMueble == null){
+        if ($this->idMueble == null) {
             $conexion->cerrarConexion();
             return false;
         }

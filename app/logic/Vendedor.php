@@ -1,4 +1,5 @@
 <?php
+require_once 'Persona.php';
 class Vendedor extends Persona{
     private $administrador;
     private $telefonos;
@@ -78,6 +79,20 @@ class Vendedor extends Persona{
         
         $conexion->cerrarConexion();
         return $vendedores;
+    }
+
+    public function consultarTodos(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $sellerDAO = new VendedorDAO();
+        $conexion->ejecutarConsulta($sellerDAO -> consultarTodos());
+        $sellers = array();
+        while($registro = $conexion->siguienteRegistro()){
+            $seller = new Vendedor($registro[0], $registro[1],$registro[2], $registro[3], $registro[4]);
+            array_push($sellers, $seller);
+        }
+        $conexion->cerrarConexion();
+        return $sellers;
     }
 }
 ?>
