@@ -43,16 +43,18 @@ class Cotizacion{
     public function consultarPorCliente(){
         $conexion = new Conexion();
         $conexion->abrirConexion();
+        $productos = array();
         $cotizacionDAO = new CotizacionDAO(null, $this->cliente);
         $conexion->ejecutarConsulta($cotizacionDAO->consultarPorCliente());
         $productos = array();
         while($resultado = $conexion->siguienteRegistro()){
             $producto = null;
-            if(array_key_exists($resultado[3], $resultado)){
+            if(array_key_exists($resultado[3], $productos)){
                 $producto = $productos[$resultado[3]];
             }else{
                 $producto = new Mueble($resultado[3]);
                 $producto->consultarPorId();
+                $productos[$resultado[5]] = $productos;
             }
             $vendedor = new Vendedor($resultado[2]);
             $cotizacion = new Cotizacion($resultado[0], $this->cliente, $vendedor, $producto);

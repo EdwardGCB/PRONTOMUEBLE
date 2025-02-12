@@ -29,7 +29,7 @@ class MuebleDAO
     }
 
     public function buscarPorNombre(){
-        return "SELECT idMueble, nombre, descripcion, img
+        return "SELECT idMueble, nombre, descripcion, img, Tipo_idTipo
                 FROM mueble
                 WHERE nombre LIKE '%$this->nombre%'
         ";
@@ -56,3 +56,4 @@ class MuebleDAO
                 LIMIT 5";
     }
 }
+?>

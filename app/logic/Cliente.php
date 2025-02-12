@@ -73,14 +73,14 @@ class Cliente extends Persona
         }
     }
 
-    /*public function actualizarCliente()
+    public function actualizarCliente()
     {
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $clienteDAO = new ClienteDAO($this->idPersona, $this->nombres, $this->apellidos, $this->identificacion, $this->img, $this->fecha_ini, $this->asesor, $this->telefonos);
         $conexion->ejecutarConsulta($clienteDAO->actualizarCliente());
         $conexion->cerrarConexion();
-    }*/
+    }
 
     public function consultarTodosClientes()
     {
@@ -185,7 +185,11 @@ class Cliente extends Persona
         $this->apellidos=$registro[2];
         $this->correo=$registro[3];
 
+        $asesor = new Vendedor($registro[4]);
+        $asesor->consultarPorId();
+        $this->asesor = $asesor;
         $conexion->cerrarConexion();
         return true;
     }
 }
+?>

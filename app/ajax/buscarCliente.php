@@ -10,7 +10,9 @@ if (isset($_POST["identificacion"])) {
             "success" => true,
             "nombres" => $cliente->getNombres(),
             "apellidos" => $cliente->getApellidos(),
-            "correo" => $cliente->getCorreo()
+            "correo" => $cliente->getCorreo(),
+            "asesorId" => $cliente->getAsesor()->getIdPersona(),
+            "asesorNombre" =>  $cliente->getAsesor()->getNombres(),
         ]);
     } else {
         echo json_encode(["success" => false, "message" => "Cliente no encontrado"]);

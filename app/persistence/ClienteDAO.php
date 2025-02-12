@@ -65,9 +65,10 @@ class ClienteDAO
 
     public function consultarPorCedula()
     {
-        return "SELECT idCliente, nombre, apellido, correo 
+        return "SELECT idCliente, nombre, apellido, correo, Vendedor_idVendedor
             FROM cliente 
             WHERE identificacion = ".$this->identificacion."";
     }
 
 }
+?>

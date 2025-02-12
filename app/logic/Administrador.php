@@ -41,3 +41,4 @@ class Administrador extends Persona{
         return true;
     }
 }
+?>

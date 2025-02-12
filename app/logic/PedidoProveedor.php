@@ -96,12 +96,14 @@ class PedidoProveedor
             } else {
                 $proveedor = new Proveedor($resultado[5]);
                 $proveedor->consultarPorId();
+                $proveedores[$resultado[5]] = $proveedor;
             }
             if (array_key_exists($resultado[6], $muebles)) {
                 $mueble = $muebles[$resultado[6]];
             } else {
                 $mueble = new Mueble($resultado[6]);
                 $mueble->consultarPorId();
+                $muebles[$resultado[6]] = $mueble;
             }
             $pedidoProveedor = new PedidoProveedor($resultado[0], $resultado[1], $resultado[2], $resultado[3], 
             $resultado[4], $proveedor, $mueble);
@@ -120,3 +122,4 @@ class PedidoProveedor
         $conexion->cerrarConexion();
     }
 }
+?>

@@ -113,14 +113,23 @@ class Mueble
 
     public function buscarPorNombre()
     {
+        $muebles = array();
+        $tipos = array();
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $muebleDAO = new MuebleDAO(null, $this->nombre);
         $conexion->ejecutarConsulta($muebleDAO->buscarPorNombre());
         $muebles = array();
         while ($registro = $conexion->siguienteRegistro()) {
-            $mueble = new Mueble($registro[0]);
-            $mueble->consultarPorId();
+            $tipo=null;
+            if(array_key_exists($registro[4], $tipos)){
+                $tipo = $muebles[$registro[4]];
+            }else{
+                $tipo = new Tipo($registro[4]);
+                $tipo->consultarPorId();
+                $tipos[$registro[4]] = $tipo;
+            }
+            $mueble = new Mueble($registro[0], $registro[1], $registro[2], $registro[3], $tipo);
             array_push($muebles, $mueble);
         }
         $conexion->cerrarConexion();

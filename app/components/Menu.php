@@ -47,14 +47,6 @@ $route = base64_decode($_GET['pid']);
                     <span class="material-symbols-rounded nav_icon">add_shopping_cart</span>
                     <span class="nav_name">Facturacion</span>
                 </a>
-                <a href="#" class="nav_link">
-                    <span class="material-symbols-rounded nav_icon">folder</span>
-                    <span class="nav_name">Files</span>
-                </a>
-                <a href="#" class="nav_link">
-                    <span class="material-symbols-rounded nav_icon">bar_chart</span>
-                    <span class="nav_name">Stats</span>
-                </a>
             </div>
         </div>
         <a href="#" class="nav_link">

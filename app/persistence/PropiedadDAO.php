@@ -32,3 +32,4 @@ class PropiedadDAO
                 VALUES ('$this->nombre', $this->tipo)";
     }
 }
+?>
