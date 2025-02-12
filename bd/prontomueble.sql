@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-02-2025 a las 05:12:03
+-- Tiempo de generación: 12-02-2025 a las 02:27:28
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -138,6 +138,15 @@ CREATE TABLE `mueble` (
   `Tipo_idTipo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `mueble`
+--
+
+INSERT INTO `mueble` (`idMueble`, `nombre`, `descripcion`, `img`, `Administrador_idAdministrador`, `Tipo_idTipo`) VALUES
+(1, 'asdasdsa', 'sadasdasd', 'defaul.png', 2, 2),
+(2, 'asdasdsa', 'sadasdasd', 'defaul.png', 2, 2),
+(3, 'sadsadsad', 'sadasdasd', 'defaul.png', 2, 21);
+
 -- --------------------------------------------------------
 
 --
@@ -166,6 +175,94 @@ CREATE TABLE `propiedad` (
   `Tipo_idTipo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `propiedad`
+--
+
+INSERT INTO `propiedad` (`idPropiedad`, `nombre`, `Tipo_idTipo`) VALUES
+(1, 'Material', 1),
+(2, 'Color', 1),
+(3, 'Tamaño', 1),
+(4, 'Peso', 1),
+(5, 'Material', 2),
+(6, 'Color', 2),
+(7, 'Tamaño', 2),
+(8, 'Peso', 2),
+(9, 'Material', 3),
+(10, 'Color', 3),
+(11, 'Tamaño', 3),
+(12, 'Peso', 3),
+(13, 'Material', 4),
+(14, 'Color', 4),
+(15, 'Tamaño', 4),
+(16, 'Peso', 4),
+(17, 'Material', 5),
+(18, 'Color', 5),
+(19, 'Tamaño', 5),
+(20, 'Peso', 5),
+(21, 'Material', 6),
+(22, 'Color', 6),
+(23, 'Tamaño', 6),
+(24, 'Peso', 6),
+(25, 'Material', 7),
+(26, 'Color', 7),
+(27, 'Tamaño', 7),
+(28, 'Peso', 7),
+(29, 'Material', 8),
+(30, 'Color', 8),
+(31, 'Tamaño', 8),
+(32, 'Peso', 8),
+(33, 'Material', 9),
+(34, 'Color', 9),
+(35, 'Tamaño', 9),
+(36, 'Peso', 9),
+(37, 'Material', 10),
+(38, 'Color', 10),
+(39, 'Tamaño', 10),
+(40, 'Peso', 10),
+(41, 'Material', 11),
+(42, 'Color', 11),
+(43, 'Tamaño', 11),
+(44, 'Peso', 11),
+(45, 'Material', 12),
+(46, 'Color', 12),
+(47, 'Tamaño', 12),
+(48, 'Peso', 12),
+(49, 'Material', 13),
+(50, 'Color', 13),
+(51, 'Tamaño', 13),
+(52, 'Peso', 13),
+(53, 'Material', 14),
+(54, 'Color', 14),
+(55, 'Tamaño', 14),
+(56, 'Peso', 14),
+(57, 'Material', 15),
+(58, 'Color', 15),
+(59, 'Tamaño', 15),
+(60, 'Peso', 15),
+(61, 'Material', 16),
+(62, 'Color', 16),
+(63, 'Tamaño', 16),
+(64, 'Peso', 16),
+(65, 'Material', 17),
+(66, 'Color', 17),
+(67, 'Tamaño', 17),
+(68, 'Peso', 17),
+(69, 'Material', 18),
+(70, 'Color', 18),
+(71, 'Tamaño', 18),
+(72, 'Peso', 18),
+(73, 'Material', 19),
+(74, 'Color', 19),
+(75, 'Tamaño', 19),
+(76, 'Peso', 19),
+(77, 'Material', 20),
+(78, 'Color', 20),
+(79, 'Tamaño', 20),
+(80, 'Peso', 20),
+(84, 'Color', 21),
+(85, 'Peso', 21);
+
 -- --------------------------------------------------------
 
 --
@@ -177,6 +274,15 @@ CREATE TABLE `propiedadmueble` (
   `Propiedad_idPropiedad` int(11) NOT NULL,
   `Mueble_idMueble` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `propiedadmueble`
+--
+
+INSERT INTO `propiedadmueble` (`descripcion`, `Propiedad_idPropiedad`, `Mueble_idMueble`) VALUES
+('asdasdsad', 6, 1),
+('asdasdsad', 6, 2),
+('sadasd', 85, 3);
 
 -- --------------------------------------------------------
 
@@ -262,7 +368,8 @@ INSERT INTO `tipo` (`idTipo`, `nombre`) VALUES
 (17, 'Mesita de noche'),
 (18, 'Taburete'),
 (19, 'Cuna'),
-(20, 'Sillón reclinable');
+(20, 'Sillón reclinable'),
+(21, 'Baños');
 
 -- --------------------------------------------------------
 
@@ -429,13 +536,13 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT de la tabla `mueble`
 --
 ALTER TABLE `mueble`
-  MODIFY `idMueble` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idMueble` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `propiedad`
 --
 ALTER TABLE `propiedad`
-  MODIFY `idPropiedad` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idPropiedad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
@@ -447,7 +554,7 @@ ALTER TABLE `proveedor`
 -- AUTO_INCREMENT de la tabla `tipo`
 --
 ALTER TABLE `tipo`
-  MODIFY `idTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Restricciones para tablas volcadas
