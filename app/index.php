@@ -18,6 +18,7 @@ require("logic/MueblePropiedad.php");
 require("logic/Propiedad.php");
 require("logic/Factura.php");
 require("logic/DetalleFactura.php");
+
 $pagesWithOutSession = array(
     "pages/LoginPage.php"
 );
@@ -25,7 +26,8 @@ $pagesWithOutSession = array(
 $pagesWithSession = array(
     "pages/Home.php",
     "pages/Users.php",
-    "pages/Products.php"
+    "pages/Products.php",
+    "pages/Facturacion.php"
 );
 
 

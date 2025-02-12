@@ -62,4 +62,12 @@ class ClienteDAO
                 LIMIT 10
                 ";
     }
+
+    public function consultarPorCedula()
+    {
+        return "SELECT idCliente, nombre, apellido, correo 
+            FROM cliente 
+            WHERE identificacion = ".$this->identificacion."";
+    }
+
 }

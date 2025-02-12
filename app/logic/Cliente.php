@@ -73,6 +73,15 @@ class Cliente extends Persona
         }
     }
 
+    /*public function actualizarCliente()
+    {
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $clienteDAO = new ClienteDAO($this->idPersona, $this->nombres, $this->apellidos, $this->identificacion, $this->img, $this->fecha_ini, $this->asesor, $this->telefonos);
+        $conexion->ejecutarConsulta($clienteDAO->actualizarCliente());
+        $conexion->cerrarConexion();
+    }*/
+
     public function consultarTodosClientes()
     {
         $conexion = new Conexion();
@@ -156,5 +165,27 @@ class Cliente extends Persona
         }
         $conexion->cerrarConexion();
         return $clientes;
+    }
+
+    public function consultarPorCedula()
+    {
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $clienteDAO = new ClienteDAO(null, null, null, $this->identificacion);
+        $conexion->ejecutarConsulta($clienteDAO->consultarPorCedula());
+        if ($conexion->numeroFilas() == 0) {
+            echo "prueba";
+            $conexion->cerrarConexion();
+            return false;
+        }
+        $registro = $conexion->siguienteRegistro();
+
+        $this->idPersona=$registro[0];
+        $this->nombres=$registro[1];
+        $this->apellidos=$registro[2];
+        $this->correo=$registro[3];
+
+        $conexion->cerrarConexion();
+        return true;
     }
 }
