@@ -14,7 +14,7 @@ class TelefonoDAO
     {
         return "SELECT idTelefonoP
         FROM TelefonoP
-        WHERE idProveedor = $this->idPersona";
+        WHERE Proveedor_idProveedor = $this->idPersona";
     }
 
     public function consultarNumerosCliente()
@@ -27,6 +27,23 @@ class TelefonoDAO
     public function consultarNumerosVendedor(){
         return "SELECT idTelefonoV
         FROM TelefonoV
-        WHERE idVendedor = $this->idPersona";
+        WHERE Vendedor_idVendedor = $this->idPersona";
+    }
+
+    public function guardarProveedor(){
+        return "INSERT INTO TelefonoP (idTelefonoP, Proveedor_idProveedor)
+                VALUES ($this->numero, $this->idPersona)
+        ";
+    }
+    public function guardarVendedor(){
+        return "INSERT INTO TelefonoV (idTelefonoV, Vendedor_idVendedor)
+                VALUES ($this->numero, $this->idPersona)
+        ";
+    }
+
+    public function guardarCliente(){
+        return "INSERT INTO TelefonoC (idTelefonoC, Cliente_idCliente)
+                VALUES ($this->numero, $this->idPersona)
+        ";
     }
 }

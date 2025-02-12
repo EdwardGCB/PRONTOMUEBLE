@@ -71,7 +71,8 @@ class Proveedor{
         $proveedorDAO = new ProveedorDAO();
         $conexion->ejecutarConsulta($proveedorDAO -> consultarTodos());
         while($registro = $conexion->siguienteRegistro()){
-            $proveedor = new Proveedor($registro[0], $registro[1], $registro[2], $registro[3], $registro[4], $registro[5]);
+            $proveedor = new Proveedor($registro[0], $registro[1], $registro[2], 
+            $registro[3], $registro[4], $registro[5]);
             array_push($proveedores, $proveedor);
         }
         $conexion->cerrarConexion();
@@ -94,6 +95,7 @@ class Proveedor{
                 $administrador->consultarPorId();
             }
             $telefono = new Telefono(null, $registro[0]);
+            $telefonos = array();
             $telefonos = $telefono->consultarNumerosProveedor(); 
             $proveedor = new Proveedor($registro[0], $registro[1], $registro[2], $registro[3], 
             $registro[4], $administrador, $telefonos);
@@ -119,6 +121,16 @@ class Proveedor{
         $this->personaContacto = $registro[3];
         $conexion->cerrarConexion();
         return true;
+    }
+
+    public function guardar(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $proveedorDAO = new ProveedorDAO(null, $this->razonSocial, $this->direccion, $this->nit, $this->personaContacto, $this->administrator);
+        $conexion->ejecutarConsulta($proveedorDAO->guardar());
+        $resultado = $conexion->obtenerLlaveAutonumerica(); 
+        $conexion->cerrarConexion();
+        return $resultado;
     }
 }
 ?>

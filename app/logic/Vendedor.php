@@ -10,10 +10,10 @@ class Vendedor extends Persona{
     public function setAdministrador($administrador){
         $this->administrador = $administrador;
     }
-    public function getPhones(){
+    public function getTelefonos(){
         return $this->telefonos;
     }
-    public function setPhones($telefonos){
+    public function setTelefonos($telefonos){
         $this->telefonos = $telefonos;
     }
     public function getPassword(){
@@ -71,6 +71,23 @@ class Vendedor extends Persona{
         $sellerDAO = new VendedorDAO(null, $this->nombres);
         $conexion->ejecutarConsulta($sellerDAO -> consultarPorNombre());
         while($resultado = $conexion->siguienteRegistro()){
+            $telefono = new Telefono(null,$resultado[0]);
+            $telefonos = $telefono->consultarNumerosVendedor();
+            $vendedor = new Vendedor($resultado[0], $resultado[1], $resultado[2], $resultado[3], null, $resultado[4], $telefonos);
+            array_push($vendedores, $vendedor);
+        }
+        
+        $conexion->cerrarConexion();
+        return $vendedores;
+    }
+
+    public function consultarTodos(){
+        $vendedores = array();
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $sellerDAO = new VendedorDAO();
+        $conexion->ejecutarConsulta($sellerDAO -> consultarTodos());
+        while($resultado = $conexion->siguienteRegistro()){
             $vendedor = new Vendedor($resultado[0], $resultado[1], $resultado[2], $resultado[3], null, $resultado[4]);
             $vendedor->consultarPorId();
             array_push($vendedores, $vendedor);
@@ -78,6 +95,17 @@ class Vendedor extends Persona{
         
         $conexion->cerrarConexion();
         return $vendedores;
+    }
+
+    public function guardar(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $vendedorDAO = new VendedorDAO(null, $this->nombres, $this->apellidos, $this->identificacion, 
+        $this->img, $this->correo, null, $this->password, $this->administrador);
+        $conexion->ejecutarConsulta($vendedorDAO -> guardar());
+        $resultado = $conexion->obtenerLlaveAutonumerica();
+        $conexion->cerrarConexion();
+        return $resultado;
     }
 }
 ?>

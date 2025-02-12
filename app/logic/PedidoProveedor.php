@@ -91,23 +91,32 @@ class PedidoProveedor
         $pedidoProveedorDAO = new PedidoProveedorDAO(null, null, null, null, null, null, $this->mueble);
         $conexion->ejecutarConsulta($pedidoProveedorDAO->buscarNombreMueble());
         while ($resultado = $conexion->siguienteRegistro()) {
-            if (array_key_exists($resultado[4], $proveedores)) {
-                $proveedor = $proveedores[$resultado[4]];
+            if (array_key_exists($resultado[5], $proveedores)) {
+                $proveedor = $proveedores[$resultado[5]];
             } else {
-                $proveedor = new Proveedor($resultado[4]);
+                $proveedor = new Proveedor($resultado[5]);
                 $proveedor->consultarPorId();
             }
-            if (array_key_exists($resultado[5], $muebles)) {
-                $mueble = $muebles[$resultado[5]];
+            if (array_key_exists($resultado[6], $muebles)) {
+                $mueble = $muebles[$resultado[6]];
             } else {
                 $mueble = new Mueble($resultado[6]);
                 $mueble->consultarPorId();
             }
-            $pedidoProveedor = new PedidoProveedor($resultado[0], $resultado[1], $resultado[2], null, 
-            $resultado[3], $proveedor, $mueble);
+            $pedidoProveedor = new PedidoProveedor($resultado[0], $resultado[1], $resultado[2], $resultado[3], 
+            $resultado[4], $proveedor, $mueble);
             array_push($productos, $pedidoProveedor);
         }
         $conexion->cerrarConexion();
         return $productos;
+    }
+
+    public function guardar(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $pedidoProveedorDAO = new PedidoProveedorDAO( $this->cantidadPost, $this->cantidadPre, $this->precio, $this->ganancia, 
+        $this->precioFinal, $this->proveedor, $this->mueble);
+        $conexion->ejecutarConsulta($pedidoProveedorDAO->guardar());
+        $conexion->cerrarConexion();
     }
 }

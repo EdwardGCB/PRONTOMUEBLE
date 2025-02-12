@@ -55,6 +55,13 @@ $itemsPagina = array_slice($items, $inicio, $itemsPorPagina);
                     echo "";
                 }  ?>
                 <td>
+                    <?php 
+                    if(count($itemActual->getTelefonos())>0){
+                        foreach($itemActual->getTelefonos() as $telefono){
+                            echo $telefono."<br>";
+                        }
+                    }
+                    ?>
                 </td>
                 <td>
                     <a href='?pid=<?= base64_encode("paginas/editClient.php") ?>&id=<?= ($tipo != "proveedores") ? $itemActual->getIdPersona() : $itemActual->getIdProveedor() ?>' class='btn btn-success' style='color: white;'>

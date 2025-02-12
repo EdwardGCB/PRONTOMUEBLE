@@ -46,4 +46,13 @@ class VendedorDAO
                 FROM vendedor
                 WHERE nombre LIKE '%" . $this->nombres . "%'";
     }
+
+    public function consultarTodos(){
+        return "SELECT idVendedor, nombre, apellido, identificacion, correo
+                FROM vendedor";
+    }
+    public function guardar(){
+        return "INSERT INTO vendedor (nombre, apellido, identificacion, correo, clave, img, Administrador_idAdministrador)
+                VALUES ('".$this->nombres."', '".$this->apellidos."', ".$this->identificacion.", '".$this->correo."', '".$this->password."', 'default.png', ".$this->administrador->getIdPersona().")";
+    }
 }

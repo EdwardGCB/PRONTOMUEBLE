@@ -41,4 +41,9 @@ class ClienteDAO
         return "SELECT idCliente, nombre, apellido, identificacion, correo, fechaCreacion, Vendedor_idVendedor
                 FROM cliente";
     }
+
+    public function guardar(){
+        return "INSERT INTO cliente (nombre, apellido, identificacion, correo, fechaCreacion, Vendedor_idVendedor)
+                VALUES ('".$this->nombres."', '".$this->apellidos."', ".$this->identificacion.", '".$this->correo."', CURDATE(), ".$this->asesor.")";
+    }
 }

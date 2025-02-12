@@ -45,6 +45,29 @@ if (isset($_POST['Add-productos'])) {
                 }
             }
         }
+
+        if (isset($_POST['cantidadPost'], $_POST['cantidadPre'], $_POST['precio'], $_POST['ganancia'], $_POST['precioFinal'], $_POST['proveedor'])) {
+            $cantidadPosts = $_POST['cantidadPost'];
+            $cantidadPres = $_POST['cantidadPre'];
+            $precios = $_POST['precio'];
+            $ganancias = $_POST['ganancia'];
+            $preciosFinales = $_POST['precioFinal'];
+            $proveedores = $_POST['proveedor'];
+
+            foreach ($proveedores as $index => $proveedorId) {
+                if ($proveedorId != '-1') {
+                    $cantidadPost = $cantidadPosts[$index];
+                    $cantidadPre = $cantidadPres[$index];
+                    $precio = $precios[$index];
+                    $ganancia = $ganancias[$index];
+                    $precioFinal = $preciosFinales[$index];
+
+                    $proveedorProducto = new PedidoProveedor($cantidadPost, $cantidadPre, $precio, $ganancia, $precioFinal, 
+                    new Proveedor($proveedorId) ,$producto);
+                    $proveedorProducto->guardar();
+                }
+            }
+        }
     }
 }else if(isset($_POST['Add-propiedades'])){
     if(isset($_POST['description-property'], $_POST['product-Type2'])){

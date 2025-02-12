@@ -133,4 +133,14 @@ class Cliente extends Persona
         $conexion->cerrarConexion();
         return $clientes;
     }
+
+    public function guardar(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $clienteDAO = new ClienteDAO(null, $this->nombres, $this->apellidos, $this->identificacion, null,$this->correo, $this->fecha_ini, $this->asesor);
+        $conexion->ejecutarConsulta($clienteDAO->guardar());
+        $this->idPersona = $conexion->obtenerLlaveAutonumerica();
+        $conexion->cerrarConexion();
+        return $this->idPersona;
+    }
 }

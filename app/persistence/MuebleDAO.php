@@ -22,7 +22,7 @@ class MuebleDAO
 
     public function consultarPorId()
     {
-        return "SELECT nombre, descripcion, administrador_administrador, Tipo_idTipo, img
+        return "SELECT nombre, descripcion, Administrador_idAdministrador, Tipo_idTipo, img
                 FROM mueble
                 WHERE idMueble = $this->idMueble
         ";

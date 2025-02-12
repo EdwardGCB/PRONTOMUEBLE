@@ -21,9 +21,15 @@ class PedidoProveedorDAO{
     }
 
     public function buscarNombreMueble(){
-        return "SELECT cantidadPost, cantidadPre, precio, precioFinal, Proveedor_idProveedor, Mueble_idMueble
+        return "SELECT cantidadPost, cantidadPre, precio, ganancia, precioFinal, Proveedor_idProveedor, Mueble_idMueble
                 FROM PedidoProveedor JOIN Mueble ON (Mueble_idMueble = idMueble)
                 WHERE nombre LIKE '%".$this->mueble->getNombre()."%'
+        ";
+    }
+
+    public function guardar(){
+        return "INSERT INTO pedidoproveedor (cantidadPost, cantidadPre, precio, ganancia, precioFinal, Proveedor_idProveedor, Mueble_idMueble)
+                VALUES ($this->cantidadPost, $this->cantidadPre, $this->precio, $this->ganancia, $this->precioFinal, ".$this->proveedor->getIdProveedor().", ".$this->mueble->getIdMueble().")
         ";
     }
 }

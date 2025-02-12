@@ -48,17 +48,17 @@ $itemsPagina = array_slice($items, $inicio, $itemsPorPagina);
     <tbody>
         <?php foreach ($itemsPagina as $itemActual) { ?>
             <tr>
-                <td><?= ($tipo == "productos") ? $itemActual->getIdMueble() : (($tipo == "propiedades") ? $itemActual->getIdPropiedad() : $itemActual->getIdTipo()) ?></td>
+                <td><?= ($tipo == "productos") ? $itemActual->getMueble()->getIdMueble() : (($tipo == "propiedades") ? $itemActual->getIdPropiedad() : $itemActual->getIdTipo()) ?></td>
                 <td><?= ($tipo == "productos") ? $itemActual->getMueble()->getNombre() : $itemActual->getNombre() ?></td>
-                <td><?= ($tipo == "productos" || $tipo =="propiedades") ? $itemActual->getTipo()->getNombre() : "" ?></td>
+                <td><?= ($tipo == "productos") ? $itemActual->getMueble()->getTipo()->getNombre() : (( $tipo =="propiedades") ? $itemActual->getTipo()->getNombre(): "") ?></td>
                 <?= ($tipo == "productos") ? "<td>" . $itemActual->getCantidadPre() . "</td>" : "" ?>
                 <?= ($tipo == "productos") ? "<td>" . $itemActual->getCantidadPost() . "</td>" : "" ?>
                 <?= ($tipo == "productos") ? "<td>" . $itemActual->getPrecio() . "</td>" : "" ?>
-                <?= ($tipo == "productos") ? "<td>" . $itemActual->getGanancias() . "</td>" : "" ?>
+                <?= ($tipo == "productos") ? "<td>" . $itemActual->getGanancia() . "</td>" : "" ?>
                 <?= ($tipo == "productos") ? "<td>" . $itemActual->getPrecioFinal() . "</td>" : "" ?>
                 <?= ($tipo == "productos") ? "<td>Proveedores</td>" : "" ?>
                 <td>
-                    <a href='?pid=<?= base64_encode("paginas/editEvento.php") ?>&id=<?= ($tipo == "productos") ? $itemActual->getIdMueble() : (($tipo == "propiedades") ? $itemActual->getIdPropiedad() : $itemActual->getIdTipo()) ?>' class='btn btn-success' style='color: white;'>
+                    <a href='?pid=<?= base64_encode("paginas/editEvento.php") ?>&id=<?= ($tipo == "productos") ? $itemActual->getMueble()->getIdMueble() : (($tipo == "propiedades") ? $itemActual->getIdPropiedad() : $itemActual->getIdTipo()) ?>' class='btn btn-success' style='color: white;'>
                         <span class='material-symbols-rounded'>edit</span>
                     </a>
                 </td>

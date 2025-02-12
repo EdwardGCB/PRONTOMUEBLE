@@ -11,6 +11,7 @@ require("logic/vendedor.php");
 require("logic/Tipo.php");
 require("logic/Mueble.php");
 require("logic/PedidoProveedor.php");
+require("logic/Proveedor.php");
 require("logic/Telefono.php");
 require("logic/Cotizacion.php");
 require("logic/MueblePropiedad.php");
