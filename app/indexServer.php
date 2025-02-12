@@ -1,5 +1,4 @@
 <?php
-
 require("logic/Persona.php");
 require("logic/Administrador.php");
 require("logic/Cliente.php");

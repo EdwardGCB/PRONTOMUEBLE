@@ -27,5 +27,10 @@ class TipoDAO{
                 FROM tipo
         ";
     }
+
+    public function guardar(){
+        return "INSERT INTO tipo (nombre)
+                VALUES ('".$this->nombre."')";
+    }
 }
 ?>

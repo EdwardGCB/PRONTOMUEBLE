@@ -8,6 +8,58 @@ if ($_SESSION["role"] == "A") {
 } else {
     header("Location: ?pid=" . base64_encode("pages/sinPermiso.php"));
 }
+
+if (isset($_POST['Add-productos'])) { 
+
+    // Validar que los datos requeridos están presentes
+    if (isset($_POST['name-product'], $_POST['description-product'], $_POST['product-Type'])) {
+
+        $nombre = $_POST['name-product'];
+        $descripcion = $_POST['description-product'];
+        $tipoProducto = $_POST['product-Type'];
+        $imagen = null;
+
+        // Manejar la subida de imagen si se proporciona
+        if (!empty($_FILES['image-product']['name'])) {
+            $directorio = "../../uploads/";
+            $nombreArchivo = time() . "_" . basename($_FILES["image-product"]["name"]);
+            $rutaArchivo = $directorio . $nombreArchivo;
+
+            if (move_uploaded_file($_FILES["image-product"]["tmp_name"], $rutaArchivo)) {
+                $imagen = $nombreArchivo;
+            }
+        }
+
+        // Crear una instancia de Producto y guardarlo en la base de datos
+        $producto = new Mueble(null, $nombre, $descripcion, $imagen,$tipoProducto, null, $persona->getIdPersona());
+
+        $productoGuardado = $producto->guardar();
+
+        if ($producto) {
+            if (isset($_POST['properties']) && is_array($_POST['properties'])) {
+                foreach ($_POST['properties'] as $propiedad) {
+                    if (!empty($propiedad['name']) && !empty($propiedad['value'])) {
+                        $propiedadMueble = new MueblePropiedad($propiedad['value'], $producto, new Propiedad($propiedad['name']));
+                        $propiedadMueble->guardar();
+                    }
+                }
+            }
+        }
+    }
+}else if(isset($_POST['Add-propiedades'])){
+    if(isset($_POST['description-property'], $_POST['product-Type2'])){
+        $descripcion = $_POST['description-property'];
+        $tipoProducto = $_POST['product-Type2'];
+
+        $newPropiedad = new Propiedad(null, $descripcion, $tipoProducto);
+        $newPropiedad->guardar();
+    }
+}else if (isset($_POST['Add-tipos'])){
+    if(isset($_POST['name-type'])){
+        $newTipo = new Tipo(null, $_POST['name-type']);
+        $newTipo->guardar();
+    }
+}
 ?>
 
 <body id="body-pd">
@@ -31,20 +83,20 @@ if ($_SESSION["role"] == "A") {
                 <button type="button" class="btn btn-outline-primary" data-value="tipos">Tipos</button>
             </div>
         </div>
-        <div class="container" id="data-component">
 
-            <div class="row mt-2">
-                <div class="container">
-                    <div class="input-group mb-3 mt-3">
-                        <input type="text" class="form-control" id="search" placeholder="Buscar" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn btn-success" type="button" id="button-addon"><span class="material-symbols-rounded">filter_alt</span></button>
-                        <button class="btn btn btn-primary" type="button" id="button-addon2"><span class="material-symbols-rounded">add</span></button>
-                    </div>
-                    <div class="container" id="datatable">
-                    </div>
+
+        <div class="row mt-2">
+            <div class="container">
+                <div class="input-group mb-3 mt-3">
+                    <input type="text" class="form-control" id="search" placeholder="Buscar" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn btn-success" type="button" id="button-addon"><span class="material-symbols-rounded">filter_alt</span></button>
+                    <button class="btn btn btn-primary" type="button" id="button-addon2"><span class="material-symbols-rounded">add</span></button>
+                </div>
+                <div class="container" id="data-component">
                 </div>
             </div>
         </div>
+
         <script src="js/home.js"></script>
         <script>
             $(document).ready(function() {
@@ -59,7 +111,7 @@ if ($_SESSION["role"] == "A") {
                             tipo: tipo // Pasamos el tipo como parámetro
                         },
                         success: function(response) {
-                            $('#datatable').html(response);
+                            $('#data-component').html(response);
                         }
                     });
                 }
@@ -79,7 +131,7 @@ if ($_SESSION["role"] == "A") {
                 $('#search').keyup(function() {
                     const filtro = $(this).val();
                     if (filtro.length >= 3 || filtro.length == 0) {
-                        let tipo = $('button[data-value].active').data('value') || 'clientes'; // Obtener el tipo seleccionado
+                        let tipo = $('button[data-value].active').data('value') || 'productos'; // Obtener el tipo seleccionado
                         cargarProductos(1, filtro, tipo);
                     }
                 });
@@ -89,7 +141,7 @@ if ($_SESSION["role"] == "A") {
                     e.preventDefault();
                     let pagina = $(this).data('pagina');
                     const filtro = $('#search').val();
-                    let tipo = $('button[data-value].active').data('value') || 'clientes';
+                    let tipo = $('button[data-value].active').data('value') || 'productos';
 
                     if (!$(this).parent().hasClass('disabled')) {
                         cargarProductos(pagina, filtro, tipo);
@@ -99,7 +151,7 @@ if ($_SESSION["role"] == "A") {
                 // Manejo del botón agregar
                 $('#button-addon2').on('click', function() {
                     console.log("Clicked");
-                    let tipo = $('button[data-value].active').data('value') || 'clientes';
+                    let tipo = $('button[data-value].active').data('value') || 'productos';
                     let url = 'indexServer.php?pid=<?= base64_encode("ajax/formularioAgregar.php") ?>&tipo=' + tipo;
                     $('#data-component').load(url);
                 });

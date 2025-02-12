@@ -4,15 +4,17 @@ class MuebleDAO
     private $idMueble;
     private $nombre;
     private $descripcio;
+    private $img;
     private $tipo;
     private $propiedades;
     private $administrador;
 
-    public function __construct($idMueble = 0, $nombre = "", $descripcio = "", $tipo = null, $propiedades = null, $administrador = null)
+    public function __construct($idMueble = 0, $nombre = "", $descripcio = "", $img="", $tipo = null, $propiedades = null, $administrador = null)
     {
         $this->idMueble = $idMueble;
         $this->nombre = $nombre;
         $this->descripcio = $descripcio;
+        $this->img = $img;
         $this->tipo = $tipo;
         $this->propiedades = $propiedades;
         $this->administrador = $administrador;
@@ -30,6 +32,12 @@ class MuebleDAO
         return "SELECT idMueble, nombre, descripcion, img
                 FROM mueble
                 WHERE nombre LIKE '%$this->nombre%'
+        ";
+    }
+
+    public function guardar(){
+        return "INSERT INTO mueble (nombre, descripcion, img, Administrador_idAdministrador, Tipo_idTipo)
+                VALUES ('$this->nombre', '$this->descripcio', 'defaul.png', $this->administrador, $this->tipo)
         ";
     }
 }

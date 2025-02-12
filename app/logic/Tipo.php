@@ -29,8 +29,14 @@ class Tipo{
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $tipoDAO = new TipoDAO($this->idTipo);
-        $this->nombre = $tipoDAO->consultarPorId();
+        $conexion->ejecutarConsulta($tipoDAO -> consultarPorId());
+        if($conexion->numeroFilas() == 0){
+            $conexion->cerrarConexion();
+            return false;
+        }
+        $this->nombre = $conexion->siguienteRegistro()[0];
         $conexion->cerrarConexion();
+        return true;
     }
 
     public function consultarPorNombre(){
@@ -59,6 +65,16 @@ class Tipo{
         }
         $conexion->cerrarConexion();
         return $tipos;
+    }
+
+    public function guardar(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $tipoDAO = new TipoDAO(null, $this->nombre);
+        $conexion->ejecutarConsulta($tipoDAO->guardar());
+        $resultado = $conexion->obtenerLlaveAutonumerica();
+        $conexion->cerrarConexion();
+        return $resultado;
     }
 }
 ?>

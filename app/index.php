@@ -8,6 +8,7 @@ require("logic/Persona.php");
 require("logic/Administrador.php");
 require("logic/Cliente.php");
 require("logic/vendedor.php");
+require("logic/Tipo.php");
 require("logic/Mueble.php");
 require("logic/PedidoProveedor.php");
 require("logic/Telefono.php");

@@ -50,7 +50,7 @@ $itemsPagina = array_slice($items, $inicio, $itemsPorPagina);
             <tr>
                 <td><?= ($tipo == "productos") ? $itemActual->getIdMueble() : (($tipo == "propiedades") ? $itemActual->getIdPropiedad() : $itemActual->getIdTipo()) ?></td>
                 <td><?= ($tipo == "productos") ? $itemActual->getMueble()->getNombre() : $itemActual->getNombre() ?></td>
-                <td><?= ($tipo == "productos" || $tipo =="propiedades") ? $itemActual->getMueble()->getTipo()->getNombre() : "" ?></td>
+                <td><?= ($tipo == "productos" || $tipo =="propiedades") ? $itemActual->getTipo()->getNombre() : "" ?></td>
                 <?= ($tipo == "productos") ? "<td>" . $itemActual->getCantidadPre() . "</td>" : "" ?>
                 <?= ($tipo == "productos") ? "<td>" . $itemActual->getCantidadPost() . "</td>" : "" ?>
                 <?= ($tipo == "productos") ? "<td>" . $itemActual->getPrecio() . "</td>" : "" ?>

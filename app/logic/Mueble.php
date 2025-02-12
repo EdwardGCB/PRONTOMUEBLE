@@ -52,10 +52,11 @@ class Mueble{
     public function setImg($img){
         $this->img = $img;
     }
-    public function __construct($idMueble=0, $nombre="", $descripcio="", $tipo=null, $propiedades=null, $administrador=null) {
+    public function __construct($idMueble=0, $nombre="", $descripcio="", $img="", $tipo=null, $propiedades=null, $administrador=null) {
         $this->idMueble = $idMueble;
         $this->nombre = $nombre;
         $this->descripcio = $descripcio;
+        $this->img = $img;
         $this->tipo = $tipo;
         $this->propiedades = $propiedades;
         $this->administrador = $administrador;
@@ -97,6 +98,20 @@ class Mueble{
         }
         $conexion->cerrarConexion();
         return $muebles;
+    }
+
+    public function guardar(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $muebleDAO = new MuebleDAO( null, $this->nombre, $this->descripcio, $this->img,$this->tipo,  null, $this->administrador);
+        $conexion->ejecutarConsulta($muebleDAO -> guardar());
+        $this->idMueble = $conexion->obtenerLlaveAutonumerica();
+        if($this->idMueble == null){
+            $conexion->cerrarConexion();
+            return false;
+        }
+        $conexion->cerrarConexion();
+        return true;
     }
 }
 ?>

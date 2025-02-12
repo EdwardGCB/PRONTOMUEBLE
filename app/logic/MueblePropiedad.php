@@ -28,5 +28,13 @@ class MueblePropiedad{
         $this->mueble = $mueble;
         $this->propiedad = $propiedad;
     }
+
+    public function guardar(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $mueblePropiedadDAO = new MueblePropiedadDAO($this->descripcion, $this->mueble, $this->propiedad);
+        $conexion->ejecutarConsulta($mueblePropiedadDAO->guardar());
+        $conexion->cerrarConexion();
+    }
 }
 ?>

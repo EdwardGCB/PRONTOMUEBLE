@@ -9,5 +9,11 @@ class MueblePropiedadDAO{
         $this->mueble = $mueble;
         $this->propiedad = $propiedad;
     }
+
+    public function guardar(){
+        return "INSERT INTO propiedadmueble (descripcion, mueble_idmueble, propiedad_idpropiedad) 
+                VALUES ('".$this->descripcion."', ".$this->mueble->getIdMueble().", ".$this->propiedad->getIdPropiedad().")
+        ";
+    }
 }
 ?>

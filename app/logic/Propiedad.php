@@ -50,5 +50,28 @@ class Propiedad{
         }
         return $propiedades;
     }
+
+    public function consultarPorTipo(){
+        $propiedades = array();
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $propiedadDAO = new PropiedadDAO(null,null,$this->tipo);
+        $conexion->ejecutarConsulta($propiedadDAO->consultarPorTipo());
+        while($registro = $conexion->siguienteRegistro()){
+            $propiedad = new Propiedad($registro[0], $registro[1]);
+            array_push($propiedades, $propiedad);
+        }
+        return $propiedades;
+    }
+
+    public function guardar(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $propiedadDAO = new PropiedadDAO(null, $this->nombre, $this->tipo);
+        $conexion->ejecutarConsulta($propiedadDAO->guardar());
+        $resultado = $conexion->obtenerLlaveAutonumerica();
+        $conexion->cerrarConexion();
+        return $resultado;
+    }
 }
 ?>
