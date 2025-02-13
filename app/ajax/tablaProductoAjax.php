@@ -40,7 +40,7 @@ $itemsPagina = array_slice($items, $inicio, $itemsPorPagina);
             <?= ($tipo == "productos") ? "<th>Cantidad Post</th>" : "" ?>
             <?= ($tipo == "productos") ? "<th>Precio</th>" : "" ?>
             <?= ($tipo == "productos") ? "<th>Ganancia</th>" : "" ?>
-            <?= ($tipo == "productos") ? "<th>Precion Final</th>" : "" ?>
+            <?= ($tipo == "productos") ? "<th>Precio Final</th>" : "" ?>
             <?= ($tipo == "productos") ? "<th>Proveedores</th>" : "" ?>
             <th>Acciones</th>
         </tr>

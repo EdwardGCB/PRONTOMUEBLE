@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-02-2025 a las 17:25:20
+-- Tiempo de generación: 13-02-2025 a las 00:10:59
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -21,37 +21,6 @@ SET time_zone = "+00:00";
 -- Base de datos: `prontomueble`
 --
 
-DELIMITER $$
---
--- Procedimientos
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `MoverCotizacionADetalle` ()   BEGIN
-    -- Insertar en DetalleFactura la información eliminada de Cotizacion
-    INSERT INTO DetalleFactura (cantidad, precio, Factura_idFactura, PedidoProveedor_Proveedor_idProveedor, PedidoProveedor_Mueble_idMueble)
-    VALUES (
-        OLD.cantidad,
-        (SELECT precioFinal 
-         FROM PedidoProveedor 
-         WHERE PedidoProveedor.Proveedor_idProveedor = OLD.PedidoProveedor_Proveedor_idProveedor
-         AND PedidoProveedor.Mueble_idMueble = OLD.PedidoProveedor_Mueble_idMueble
-         LIMIT 1),
-        (SELECT idFactura 
-         FROM Factura 
-         WHERE Cliente_idCliente = (SELECT Cliente_idCliente FROM Cotizacion WHERE cantidad = OLD.cantidad LIMIT 1)
-         ORDER BY fechaCreacion DESC LIMIT 1),
-        OLD.PedidoProveedor_Proveedor_idProveedor,
-        OLD.PedidoProveedor_Mueble_idMueble
-    );
-
-    -- Actualizar cantidadPost en PedidoProveedor
-    UPDATE PedidoProveedor
-    SET cantidadPost = cantidadPost - OLD.cantidad
-    WHERE Proveedor_idProveedor = OLD.PedidoProveedor_Proveedor_idProveedor
-    AND Mueble_idMueble = OLD.PedidoProveedor_Mueble_idMueble;
-END$$
-
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
@@ -66,7 +35,7 @@ CREATE TABLE `administrador` (
   `identificacion` varchar(10) NOT NULL,
   `clave` varchar(45) NOT NULL,
   `img` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `administrador`
@@ -74,7 +43,47 @@ CREATE TABLE `administrador` (
 
 INSERT INTO `administrador` (`idAdministrador`, `nombre`, `apellido`, `correo`, `identificacion`, `clave`, `img`) VALUES
 (1, 'Robinson', 'Alza', 'R.alza@PRONTOMUEBLE.com', '1234567890', '202cb962ac59075b964b07152d234b70', NULL),
-(2, 'Edward', 'Castillo', 'E.castillo@PRONTOMUEBLE.com', '9876543210', '202cb962ac59075b964b07152d234b70', NULL);
+(2, 'Edward', 'Castillo', 'E.castillo@PRONTOMUEBLE.com', '9876543210', '202cb962ac59075b964b07152d234b70', NULL),
+(3, 'Carlos', 'Ramirez', 'carlos.ramirez@example.com', '1122334455', 'clave789', 'carlos.jpg'),
+(4, 'Laura', 'Gonzalez', 'laura.gonzalez@example.com', '2233445566', 'clave321', 'laura.jpg'),
+(5, 'Diego', 'Fernandez', 'diego.fernandez@example.com', '3344556677', 'clave654', 'diego.jpg'),
+(6, 'Elena', 'Torres', 'elena.torres@example.com', '4455667788', 'clave987', 'elena.jpg'),
+(7, 'Roberto', 'Diaz', 'roberto.diaz@example.com', '5566778899', 'clave147', 'roberto.jpg'),
+(8, 'Carmen', 'Ruiz', 'carmen.ruiz@example.com', '6677889900', 'clave258', 'carmen.jpg'),
+(9, 'Francisco', 'Mendez', 'francisco.mendez@example.com', '7788990011', 'clave369', 'francisco.jpg'),
+(10, 'Paula', 'Castro', 'paula.castro@example.com', '8899001122', 'clave741', 'paula.jpg'),
+(11, 'Hector', 'Jimenez', 'hector.jimenez@example.com', '9900112233', 'clave852', 'hector.jpg'),
+(12, 'Gabriela', 'Morales', 'gabriela.morales@example.com', '1011121314', 'clave963', 'gabriela.jpg'),
+(13, 'Alberto', 'Santos', 'alberto.santos@example.com', '1112131415', 'clave159', 'alberto.jpg'),
+(14, 'Julia', 'Ortega', 'julia.ortega@example.com', '1213141516', 'clave753', 'julia.jpg'),
+(15, 'Raul', 'Navarro', 'raul.navarro@example.com', '1314151617', 'clave951', 'raul.jpg'),
+(16, 'Silvia', 'Herrera', 'silvia.herrera@example.com', '1415161718', 'clave357', 'silvia.jpg'),
+(17, 'Oscar', 'Medina', 'oscar.medina@example.com', '1516171819', 'clave258', 'oscar.jpg'),
+(18, 'Isabel', 'Rojas', 'isabel.rojas@example.com', '1617181920', 'clave147', 'isabel.jpg'),
+(19, 'Fernando', 'Vargas', 'fernando.vargas@example.com', '1718192021', 'clave369', 'fernando.jpg'),
+(20, 'Monica', 'Guerrero', 'monica.guerrero@example.com', '1819202122', 'clave741', 'monica.jpg'),
+(21, 'Esteban', 'Luna', 'esteban.luna@example.com', '1920212223', 'clave852', 'esteban.jpg'),
+(22, 'Patricia', 'Salazar', 'patricia.salazar@example.com', '2021222324', 'clave963', 'patricia.jpg'),
+(23, 'Andres', 'Figueroa', 'andres.figueroa@example.com', '2122232425', 'clave159', 'andres.jpg'),
+(24, 'Valeria', 'Cortez', 'valeria.cortez@example.com', '2223242526', 'clave753', 'valeria.jpg'),
+(25, 'Jorge', 'Peña', 'jorge.pena@example.com', '2324252627', 'clave951', 'jorge.jpg'),
+(26, 'Beatriz', 'Molina', 'beatriz.molina@example.com', '2425262728', 'clave357', 'beatriz.jpg'),
+(27, 'Antonio', 'Delgado', 'antonio.delgado@example.com', '2526272829', 'clave258', 'antonio.jpg'),
+(28, 'Lucia', 'Guzman', 'lucia.guzman@example.com', '2627282930', 'clave147', 'lucia.jpg'),
+(29, 'Daniel', 'Estrada', 'daniel.estrada@example.com', '2728293031', 'clave369', 'daniel.jpg'),
+(30, 'Rocio', 'Vega', 'rocio.vega@example.com', '2829303132', 'clave741', 'rocio.jpg'),
+(31, 'Mariano', 'Cruz', 'mariano.cruz@example.com', '2930313233', 'clave852', 'mariano.jpg'),
+(32, 'Alejandra', 'Flores', 'alejandra.flores@example.com', '3031323334', 'clave963', 'alejandra.jpg'),
+(33, 'Federico', 'Sosa', 'federico.sosa@example.com', '3132333435', 'clave159', 'federico.jpg'),
+(34, 'Carolina', 'Paredes', 'carolina.paredes@example.com', '3233343536', 'clave753', 'carolina.jpg'),
+(35, 'Emilio', 'Rivero', 'emilio.rivero@example.com', '3334353637', 'clave951', 'emilio.jpg'),
+(36, 'Diana', 'Mendoza', 'diana.mendoza@example.com', '3435363738', 'clave357', 'diana.jpg'),
+(37, 'Gustavo', 'Bautista', 'gustavo.bautista@example.com', '3536373839', 'clave258', 'gustavo.jpg'),
+(38, 'Florencia', 'Serrano', 'florencia.serrano@example.com', '3637383940', 'clave147', 'florencia.jpg'),
+(39, 'Ezequiel', 'Avila', 'ezequiel.avila@example.com', '3738394041', 'clave369', 'ezequiel.jpg'),
+(40, 'Nadia', 'Reyes', 'nadia.reyes@example.com', '3839404142', 'clave741', 'nadia.jpg'),
+(50, 'Carlos', 'Rodriguez', 'carlos.rodriguez@example.com', '5678901234', 'clave999', 'carlos.jpg'),
+(51, 'Claudia', 'Hernandez', 'Claudia@PRONTOMUEBLE.com', '123456789', ' md5(\"123456\")', NULL);
 
 -- --------------------------------------------------------
 
@@ -90,7 +99,7 @@ CREATE TABLE `cliente` (
   `identificacion` varchar(10) NOT NULL,
   `fechaCreacion` date NOT NULL,
   `Vendedor_idVendedor` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `cliente`
@@ -107,7 +116,46 @@ INSERT INTO `cliente` (`idCliente`, `nombre`, `apellido`, `correo`, `identificac
 (8, 'Sofía', 'Díaz', 'sofia.diaz@example.com', '6677889900', '2024-02-09', 2),
 (9, 'Miguel', 'Hernández', 'miguel.hernandez@example.com', '7788990011', '2024-02-09', 3),
 (10, 'Elena', 'Castro', 'elena.castro@example.com', '8899001122', '2024-02-09', 1),
-(11, 'Robin', 'Alza', 'dasdsadsadasdsad@gmail.com', '213213213', '2025-02-12', 11);
+(11, 'Mario', 'Jiménez', 'mario.jimenez@example.com', '1122334455', '2025-02-11', 2),
+(12, 'Isabel', 'Morales', 'isabel.morales@example.com', '2233445566', '2025-02-12', 1),
+(13, 'Andrés', 'Fernández', 'andres.fernandez@example.com', '3344556677', '2025-02-13', 3),
+(14, 'Sofía', 'Cruz', 'sofia.cruz@example.com', '4455667788', '2025-02-14', 2),
+(15, 'Javier', 'Torres', 'javier.torres@example.com', '5566778899', '2025-02-15', 1),
+(16, 'Carmen', 'Jiménez', 'carmen.jimenez@example.com', '6677889900', '2025-02-16', 3),
+(17, 'Antonio', 'Vázquez', 'antonio.vazquez@example.com', '7788990011', '2025-02-17', 2),
+(18, 'Patricia', 'Ruiz', 'patricia.ruiz@example.com', '8899001122', '2025-02-18', 1),
+(19, 'Ricardo', 'Paredes', 'ricardo.paredes@example.com', '9900112233', '2025-02-19', 3),
+(20, 'Sara', 'Alonso', 'sara.alonso@example.com', '1011122334', '2025-02-20', 2),
+(21, 'Álvaro', 'Mendoza', 'alvaro.mendoza@example.com', '1122334455', '2025-02-21', 1),
+(22, 'María', 'Vega', 'maria.vega@example.com', '2233445566', '2025-02-22', 3),
+(23, 'David', 'Gil', 'david.gil@example.com', '3344556677', '2025-02-23', 2),
+(24, 'Silvia', 'Luna', 'silvia.luna@example.com', '4455667788', '2025-02-24', 1),
+(25, 'Eduardo', 'Ruiz', 'eduardo.ruiz@example.com', '5566778899', '2025-02-25', 3),
+(26, 'Teresa', 'Serrano', 'teresa.serrano@example.com', '6677889900', '2025-02-26', 2),
+(27, 'Fernando', 'Castro', 'fernando.castro@example.com', '7788990011', '2025-02-27', 1),
+(28, 'Julia', 'Guerra', 'julia.guerra@example.com', '8899001122', '2025-02-28', 3),
+(29, 'Carlos', 'Guzmán', 'carlos.guzman@example.com', '9900112233', '0000-00-00', 2),
+(30, 'Martín', 'López', 'martin.lopez@example.com', '1011122334', '2025-03-01', 1),
+(31, 'Beatriz', 'Romero', 'beatriz.romero@example.com', '1122334455', '2025-03-02', 3),
+(32, 'Felipe', 'Pinto', 'felipe.pinto@example.com', '2233445566', '2025-03-03', 2),
+(33, 'Raquel', 'Navarro', 'raquel.navarro@example.com', '3344556677', '2025-03-04', 1),
+(34, 'Óscar', 'Martín', 'oscar.martin@example.com', '4455667788', '2025-03-05', 3),
+(35, 'Iván', 'Muñoz', 'ivan.munoz@example.com', '5566778899', '2025-03-06', 2),
+(36, 'Norma', 'Cabrera', 'norma.cabrera@example.com', '6677889900', '2025-03-07', 1),
+(37, 'Victor', 'Vargas', 'victor.vargas@example.com', '7788990011', '2025-03-08', 3),
+(38, 'Esther', 'Silva', 'esther.silva@example.com', '8899001122', '2025-03-09', 2),
+(39, 'Jaime', 'Hernández', 'jaime.hernandez@example.com', '9900112233', '2025-03-10', 1),
+(40, 'Mónica', 'Campos', 'monica.campos@example.com', '1011122334', '2025-03-11', 3),
+(41, 'Ricardo', 'Villar', 'ricardo.villar@example.com', '1122334455', '2025-03-12', 2),
+(42, 'Lidia', 'Blanco', 'lidia.blanco@example.com', '2233445566', '2025-03-13', 1),
+(43, 'Luis', 'Ferrer', 'luis.ferrer@example.com', '3344556677', '2025-03-14', 3),
+(44, 'Antonio', 'González', 'antonio.gonzalez@example.com', '4455667788', '2025-03-15', 2),
+(45, 'Estela', 'Ríos', 'estela.rios@example.com', '5566778899', '2025-03-16', 1),
+(46, 'Oscar', 'Gutiérrez', 'oscar.gutierrez@example.com', '6677889900', '2025-03-17', 3),
+(47, 'Teresa', 'Herrera', 'teresa.herrera@example.com', '7788990011', '2025-03-18', 2),
+(48, 'Victor', 'Bravo', 'victor.bravo@example.com', '8899001122', '2025-03-19', 1),
+(49, 'José', 'Moreno', 'jose.moreno@example.com', '9900112233', '2025-03-20', 3),
+(50, 'María', 'Sánchez', 'maria.sanchez@example.com', '1011122334', '2025-03-21', 2);
 
 -- --------------------------------------------------------
 
@@ -121,43 +169,7 @@ CREATE TABLE `cotizacion` (
   `Vendedor_idVendedor` int(11) NOT NULL,
   `PedidoProveedor_Proveedor_idProveedor` int(11) NOT NULL,
   `PedidoProveedor_Mueble_idMueble` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
---
--- Volcado de datos para la tabla `cotizacion`
---
-
-INSERT INTO `cotizacion` (`cantidad`, `Cliente_idCliente`, `Vendedor_idVendedor`, `PedidoProveedor_Proveedor_idProveedor`, `PedidoProveedor_Mueble_idMueble`) VALUES
-(1, 1, 2, 3, 4),
-(2, 2, 3, 4, 5),
-(1, 3, 4, 5, 6),
-(3, 4, 5, 6, 7),
-(2, 5, 6, 7, 8),
-(1, 6, 7, 8, 9),
-(4, 7, 8, 9, 10),
-(3, 8, 9, 10, 11),
-(2, 9, 10, 11, 12),
-(1, 10, 11, 12, 13),
-(4, 11, 12, 13, 14),
-(3, 12, 13, 14, 15),
-(2, 13, 14, 15, 16),
-(1, 14, 15, 16, 17),
-(4, 15, 16, 17, 18),
-(3, 16, 17, 18, 19),
-(2, 17, 18, 19, 20),
-(1, 18, 19, 20, 21),
-(4, 19, 20, 21, 22),
-(3, 20, 21, 22, 23);
-
---
--- Disparadores `cotizacion`
---
-DELIMITER $$
-CREATE TRIGGER `trigger_mover_cotizacion` AFTER DELETE ON `cotizacion` FOR EACH ROW BEGIN
-    -- Llamar al procedimiento almacenado para mover los datos
-    CALL MoverCotizacionADetalle();
-END
-$$
-DELIMITER ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -171,7 +183,7 @@ CREATE TABLE `detallefactura` (
   `Factura_idFactura` int(11) NOT NULL,
   `PedidoProveedor_Proveedor_idProveedor` int(11) NOT NULL,
   `PedidoProveedor_Mueble_idMueble` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -189,7 +201,7 @@ CREATE TABLE `factura` (
   `total` double NOT NULL,
   `Vendedor_idVendedor` int(11) NOT NULL,
   `Cliente_idCliente` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -204,7 +216,7 @@ CREATE TABLE `mueble` (
   `img` varchar(45) DEFAULT NULL,
   `Administrador_idAdministrador` int(11) NOT NULL,
   `Tipo_idTipo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `mueble`
@@ -214,8 +226,8 @@ INSERT INTO `mueble` (`idMueble`, `nombre`, `descripcion`, `img`, `Administrador
 (1, 'asdasdsa', 'sadasdasd', 'defaul.png', 2, 2),
 (2, 'asdasdsa', 'sadasdasd', 'defaul.png', 2, 2),
 (3, 'sadsadsad', 'sadasdasd', 'defaul.png', 2, 21),
-(4, 'Estante para cocina', 'Estante con finos acabados en madera y acero ', 'defaul.png', 2, 3),
-(5, 'Estante para cocina', 'Estante con finos acabados en madera y acero ', 'defaul.png', 2, 3);
+(4, 'Estantería', 'Estante de pared para libros', 'estanteria.jpg', 1, 2),
+(5, 'Lámpara de mesa', 'Lámpara de escritorio con regulador', 'lampara_mesa.jpg', 2, 4),
 (6, 'Escritorio', 'Escritorio moderno de oficina', 'escritorio_moderno.jpg', 3, 1),
 (7, 'Cama doble', 'Cama matrimonial con colchón incluido', 'cama_doble.jpg', 4, 5),
 (8, 'Silla de jardín', 'Silla plegable para exterior', 'silla_jardin.jpg', 5, 6),
@@ -261,6 +273,7 @@ INSERT INTO `mueble` (`idMueble`, `nombre`, `descripcion`, `img`, `Administrador
 (48, 'Silla de escritorio', 'Silla de escritorio ajustable con ruedas', 'silla_escritorio.jpg', 5, 1),
 (49, 'Mesa de trabajo con estante', 'Mesa con estante para almacenar cosas', 'mesa_trabajo_estante.jpg', 6, 1),
 (50, 'Perchero de pared', 'Perchero que se instala en la pared', 'perchero_pared.jpg', 7, 7);
+
 -- --------------------------------------------------------
 
 --
@@ -275,66 +288,74 @@ CREATE TABLE `pedidoproveedor` (
   `precioFinal` double NOT NULL,
   `Proveedor_idProveedor` int(11) NOT NULL,
   `Mueble_idMueble` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `pedidoproveedor`
 --
 
 INSERT INTO `pedidoproveedor` (`cantidadPost`, `cantidadPre`, `precio`, `ganancia`, `precioFinal`, `Proveedor_idProveedor`, `Mueble_idMueble`) VALUES
-(10, 0, 300000, 0.23, 300690, 3, 5),
-(4, 2, 250000, 0.23, 250575, 5, 5);
-(10, 5, 150.00, 0.20, 1800.00, 1, 1),
-(15, 7, 200.00, 0.15, 3300.00, 2, 2),
-(12, 6, 180.00, 0.18, 2136.00, 3, 3),
-(8, 4, 250.00, 0.10, 2200.00, 4, 4),
-(18, 9, 120.00, 0.25, 2160.00, 5, 5),
-(25, 12, 220.00, 0.18, 5500.00, 6, 6),
-(10, 5, 170.00, 0.22, 1700.00, 7, 7),
-(5, 2, 300.00, 0.30, 1500.00, 8, 8),
-(30, 15, 130.00, 0.20, 3900.00, 9, 9),
-(12, 6, 160.00, 0.25, 1920.00, 10, 10),
-(10, 5, 250.00, 0.18, 2500.00, 1, 11),
-(8, 4, 190.00, 0.23, 1520.00, 2, 12),
-(14, 7, 210.00, 0.22, 2940.00, 3, 13),
-(20, 10, 280.00, 0.20, 5600.00, 4, 14),
-(9, 4, 150.00, 0.18, 1350.00, 5, 15),
-(18, 9, 220.00, 0.15, 3960.00, 6, 16),
-(15, 8, 200.00, 0.17, 3000.00, 7, 17),
-(7, 3, 270.00, 0.18, 1890.00, 8, 18),
-(13, 6, 180.00, 0.20, 2340.00, 9, 19),
-(16, 8, 200.00, 0.18, 3200.00, 10, 20),
-(10, 5, 160.00, 0.22, 1600.00, 1, 21),
-(22, 11, 240.00, 0.15, 5280.00, 2, 22),
-(11, 5, 210.00, 0.25, 2310.00, 3, 23),
-(14, 7, 250.00, 0.12, 3500.00, 4, 24),
-(19, 9, 150.00, 0.30, 2850.00, 5, 25),
-(10, 5, 230.00, 0.22, 2300.00, 6, 26),
-(16, 8, 180.00, 0.25, 2880.00, 7, 27),
-(12, 6, 270.00, 0.20, 3240.00, 8, 28),
-(20, 10, 130.00, 0.18, 2600.00, 9, 29),
-(13, 6, 250.00, 0.15, 3250.00, 10, 30),
-(22, 11, 200.00, 0.20, 4400.00, 1, 31),
-(8, 4, 180.00, 0.18, 1440.00, 2, 32),
-(18, 9, 220.00, 0.20, 3960.00, 3, 33),
-(15, 7, 230.00, 0.18, 3450.00, 4, 34),
-(7, 3, 250.00, 0.25, 1750.00, 5, 35),
-(10, 5, 200.00, 0.20, 2000.00, 6, 36),
-(14, 7, 180.00, 0.22, 2520.00, 7, 37),
-(9, 4, 220.00, 0.18, 1980.00, 8, 38),
-(13, 6, 160.00, 0.20, 2080.00, 9, 39),
-(12, 6, 210.00, 0.15, 2520.00, 10, 40),
-(8, 4, 230.00, 0.18, 1840.00, 1, 41),
-(15, 7, 220.00, 0.17, 3300.00, 2, 42),
-(11, 5, 200.00, 0.20, 2200.00, 3, 43),
-(16, 8, 180.00, 0.22, 2880.00, 4, 44),
-(10, 5, 240.00, 0.18, 2400.00, 5, 45),
-(20, 10, 210.00, 0.25, 4200.00, 6, 46),
-(12, 6, 230.00, 0.20, 2760.00, 7, 47),
-(14, 7, 170.00, 0.23, 2380.00, 8, 48),
-(18, 9, 250.00, 0.30, 4500.00, 9, 49),
-(13, 6, 190.00, 0.22, 2470.00, 10, 50);
-
+(10, 5, 150, 0.2, 1800, 1, 1),
+(10, 5, 250, 0.18, 2500, 1, 11),
+(10, 5, 160, 0.22, 1600, 1, 21),
+(22, 11, 200, 0.2, 4400, 1, 31),
+(8, 4, 230, 0.18, 1840, 1, 41),
+(15, 7, 200, 0.15, 3300, 2, 2),
+(8, 4, 190, 0.23, 1520, 2, 12),
+(22, 11, 240, 0.15, 5280, 2, 22),
+(8, 4, 180, 0.18, 1440, 2, 32),
+(15, 7, 220, 0.17, 3300, 2, 42),
+(3, 4, 150.5, 0.15, 172.08, 3, 1),
+(2, 3, 200, 0.1, 220, 3, 2),
+(12, 6, 180, 0.18, 2136, 3, 3),
+(1, 2, 300, 0.12, 336, 3, 4),
+(2, 2, 120, 0.18, 141.6, 3, 5),
+(3, 3, 180.5, 0.25, 225.62, 3, 6),
+(1, 1, 250, 0.1, 275, 3, 7),
+(5, 4, 50, 0.15, 57.5, 3, 8),
+(3, 2, 180, 0.22, 219.6, 3, 9),
+(4, 4, 140.5, 0.18, 165.79, 3, 10),
+(2, 3, 220, 0.2, 264, 3, 11),
+(3, 2, 160.75, 0.12, 179.64, 3, 12),
+(14, 7, 210, 0.22, 2940, 3, 13),
+(11, 5, 210, 0.25, 2310, 3, 23),
+(18, 9, 220, 0.2, 3960, 3, 33),
+(11, 5, 200, 0.2, 2200, 3, 43),
+(8, 4, 250, 0.1, 2200, 4, 4),
+(20, 10, 280, 0.2, 5600, 4, 14),
+(14, 7, 250, 0.12, 3500, 4, 24),
+(15, 7, 230, 0.18, 3450, 4, 34),
+(16, 8, 180, 0.22, 2880, 4, 44),
+(18, 9, 120, 0.25, 2160, 5, 5),
+(9, 4, 150, 0.18, 1350, 5, 15),
+(19, 9, 150, 0.3, 2850, 5, 25),
+(7, 3, 250, 0.25, 1750, 5, 35),
+(10, 5, 240, 0.18, 2400, 5, 45),
+(25, 12, 220, 0.18, 5500, 6, 6),
+(18, 9, 220, 0.15, 3960, 6, 16),
+(10, 5, 230, 0.22, 2300, 6, 26),
+(10, 5, 200, 0.2, 2000, 6, 36),
+(20, 10, 210, 0.25, 4200, 6, 46),
+(10, 5, 170, 0.22, 1700, 7, 7),
+(15, 8, 200, 0.17, 3000, 7, 17),
+(16, 8, 180, 0.25, 2880, 7, 27),
+(14, 7, 180, 0.22, 2520, 7, 37),
+(12, 6, 230, 0.2, 2760, 7, 47),
+(5, 2, 300, 0.3, 1500, 8, 8),
+(7, 3, 270, 0.18, 1890, 8, 18),
+(12, 6, 270, 0.2, 3240, 8, 28),
+(9, 4, 220, 0.18, 1980, 8, 38),
+(14, 7, 170, 0.23, 2380, 8, 48),
+(30, 15, 130, 0.2, 3900, 9, 9),
+(13, 6, 180, 0.2, 2340, 9, 19),
+(20, 10, 130, 0.18, 2600, 9, 29),
+(13, 6, 160, 0.2, 2080, 9, 39),
+(18, 9, 250, 0.3, 4500, 9, 49),
+(12, 6, 160, 0.25, 1920, 10, 10),
+(16, 8, 200, 0.18, 3200, 10, 20),
+(13, 6, 250, 0.15, 3250, 10, 30),
+(12, 6, 210, 0.15, 2520, 10, 40),
+(13, 6, 190, 0.22, 2470, 10, 50);
 
 -- --------------------------------------------------------
 
@@ -346,7 +367,7 @@ CREATE TABLE `propiedad` (
   `idPropiedad` int(11) NOT NULL,
   `nombre` varchar(45) NOT NULL,
   `Tipo_idTipo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `propiedad`
@@ -446,7 +467,7 @@ CREATE TABLE `propiedadmueble` (
   `descripcion` varchar(45) NOT NULL,
   `Propiedad_idPropiedad` int(11) NOT NULL,
   `Mueble_idMueble` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `propiedadmueble`
@@ -488,15 +509,18 @@ CREATE TABLE `proveedor` (
   `nit` varchar(45) NOT NULL,
   `img` varchar(45) DEFAULT NULL,
   `Administrador_idAdministrador` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `proveedor`
 --
 
 INSERT INTO `proveedor` (`idProveedor`, `personaContacto`, `razonSocial`, `direccion`, `nit`, `img`, `Administrador_idAdministrador`) VALUES
-(3, 'david duque', 'Magico Mundo', 'cra 6 c este nro 90d 21 sur', '2133312', 'default.png', 2),
-(5, 'alisson', 'Morenos', 'cra 6 c este nro 90d 21 sur', '231323', 'default.png', 2);
+(1, 'Juan Pérez', 'Proveedor S.A.', 'Av. Central 123', '1234567890', 'proveedor1.jpg', 1),
+(2, 'Ana Gómez', 'Comercial Gómez', 'Calle del Sol 456', '2345678901', 'proveedor2.jpg', 2),
+(3, 'Carlos Martínez', 'Muebles Martínez', 'Calle 45, Zona 7', '3456789012', 'proveedor3.jpg', 3),
+(4, 'Laura López', 'TecnoPro', 'Av. de las Palmas 789', '4567890123', 'proveedor4.jpg', 4),
+(5, 'Pedro Sánchez', 'Sánchez & Asociados', 'Calle 15, Edificio A', '5678901234', 'proveedor5.jpg', 5),
 (6, 'Marta Ramírez', 'Suministros Ramírez', 'Calle la Paz 101', '6789012345', 'proveedor6.jpg', 6),
 (7, 'José Díaz', 'Comercial Díaz', 'Calle 32, Local 3', '7890123456', 'proveedor7.jpg', 7),
 (8, 'Lucía Gómez', 'Gómez Electronics', 'Av. Libertad 220', '8901234567', 'proveedor8.jpg', 8),
@@ -543,7 +567,6 @@ INSERT INTO `proveedor` (`idProveedor`, `personaContacto`, `razonSocial`, `direc
 (49, 'José Moreno', 'Moreno & Co.', 'Calle 12, Piso 4', '9900112233', 'proveedor49.jpg', 9),
 (50, 'María Sánchez', 'Sánchez Proveedores', 'Av. Mirador 25', '1011122334', 'proveedor50.jpg', 10);
 
-
 -- --------------------------------------------------------
 
 --
@@ -553,11 +576,12 @@ INSERT INTO `proveedor` (`idProveedor`, `personaContacto`, `razonSocial`, `direc
 CREATE TABLE `telefonoc` (
   `idTelefonoC` bigint(20) NOT NULL,
   `Cliente_idCliente` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `telefonoc`
 --
+
 INSERT INTO `telefonoc` (`idTelefonoC`, `Cliente_idCliente`) VALUES
 (12345678901, 1),
 (12345678902, 1),
@@ -609,7 +633,6 @@ INSERT INTO `telefonoc` (`idTelefonoC`, `Cliente_idCliente`) VALUES
 (12345678948, 24),
 (12345678949, 25),
 (12345678950, 25);
-x
 
 -- --------------------------------------------------------
 
@@ -620,11 +643,12 @@ x
 CREATE TABLE `telefonop` (
   `idTelefonoP` bigint(20) NOT NULL,
   `Proveedor_idProveedor` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `telefonop`
 --
+
 INSERT INTO `telefonop` (`idTelefonoP`, `Proveedor_idProveedor`) VALUES
 (98765432101, 1),
 (98765432102, 1),
@@ -677,7 +701,6 @@ INSERT INTO `telefonop` (`idTelefonoP`, `Proveedor_idProveedor`) VALUES
 (98765432149, 25),
 (98765432150, 25);
 
-
 -- --------------------------------------------------------
 
 --
@@ -687,11 +710,12 @@ INSERT INTO `telefonop` (`idTelefonoP`, `Proveedor_idProveedor`) VALUES
 CREATE TABLE `telefonov` (
   `idTelefonoV` bigint(20) NOT NULL,
   `Vendedor_idVendedor` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `telefonov`
 --
+
 INSERT INTO `telefonov` (`idTelefonoV`, `Vendedor_idVendedor`) VALUES
 (55512345601, 1),
 (55512345602, 1),
@@ -753,7 +777,7 @@ INSERT INTO `telefonov` (`idTelefonoV`, `Vendedor_idVendedor`) VALUES
 CREATE TABLE `tipo` (
   `idTipo` int(11) NOT NULL,
   `nombre` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `tipo`
@@ -797,7 +821,7 @@ CREATE TABLE `vendedor` (
   `clave` varchar(45) NOT NULL,
   `img` varchar(45) DEFAULT NULL,
   `Administrador_idAdministrador` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `vendedor`
@@ -814,7 +838,46 @@ INSERT INTO `vendedor` (`idVendedor`, `nombre`, `apellido`, `correo`, `identific
 (8, 'Patricia', 'Torres', 'patricia.torres@example.com', '6677889900', '690162610dae5242ca8aebf97720567a', 'default_perfil.jpg', 2),
 (9, 'Ricardo', 'Díaz', 'ricardo.diaz@example.com', '7788990011', '3d33d9a0066f4601054bbbfa0e6ff760', 'default_perfil.jpg', 2),
 (10, 'Valeria', 'Castro', 'valeria.castro@example.com', '8899001122', 'f0e88ab9fb980ece24ebe78179f51246', 'default_perfil.jpg', 1),
-(11, 'Edward', 'Castillo', 'edwcastillo230@gmail.com', '1010961040', '6b5e311f642752e9c687eeb4ee9e05d8', 'default.png', 2);
+(11, 'Elena', 'García', 'elena.garcia@example.com', '100000011', 'clave123', 'img11.jpg', 1),
+(12, 'José', 'Mendoza', 'jose.mendoza@example.com', '100000012', 'clave123', 'img12.jpg', 1),
+(13, 'Clara', 'Cruz', 'clara.cruz@example.com', '100000013', 'clave123', 'img13.jpg', 1),
+(14, 'Francisco', 'Ortega', 'francisco.ortega@example.com', '100000014', 'clave123', 'img14.jpg', 1),
+(15, 'Andrea', 'Jiménez', 'andrea.jimenez@example.com', '100000015', 'clave123', 'img15.jpg', 1),
+(16, 'Manuel', 'Morales', 'manuel.morales@example.com', '100000016', 'clave123', 'img16.jpg', 1),
+(17, 'Camila', 'Ruiz', 'camila.ruiz@example.com', '100000017', 'clave123', 'img17.jpg', 1),
+(18, 'Ángel', 'Vargas', 'angel.vargas@example.com', '100000018', 'clave123', 'img18.jpg', 1),
+(19, 'Patricia', 'Castro', 'patricia.castro@example.com', '100000019', 'clave123', 'img19.jpg', 1),
+(20, 'Alberto', 'Núñez', 'alberto.nunez@example.com', '100000020', 'clave123', 'img20.jpg', 1),
+(21, 'Natalia', 'Rojas', 'natalia.rojas@example.com', '100000021', 'clave123', 'img21.jpg', 1),
+(22, 'Fernando', 'Guerrero', 'fernando.guerrero@example.com', '100000022', 'clave123', 'img22.jpg', 1),
+(23, 'Isabel', 'Reyes', 'isabel.reyes@example.com', '100000023', 'clave123', 'img23.jpg', 1),
+(24, 'Emilio', 'Cordero', 'emilio.cordero@example.com', '100000024', 'clave123', 'img24.jpg', 1),
+(25, 'Verónica', 'Silva', 'veronica.silva@example.com', '100000025', 'clave123', 'img25.jpg', 1),
+(26, 'Raúl', 'Herrera', 'raul.herrera@example.com', '100000026', 'clave123', 'img26.jpg', 1),
+(27, 'Julia', 'Maldonado', 'julia.maldonado@example.com', '100000027', 'clave123', 'img27.jpg', 1),
+(28, 'Esteban', 'Gutiérrez', 'esteban.gutierrez@example.com', '100000028', 'clave123', 'img28.jpg', 1),
+(29, 'Carolina', 'Ramos', 'carolina.ramos@example.com', '100000029', 'clave123', 'img29.jpg', 1),
+(30, 'Gustavo', 'Espinoza', 'gustavo.espinoza@example.com', '100000030', 'clave123', 'img30.jpg', 1),
+(31, 'Valeria', 'Salazar', 'valeria.salazar@example.com', '100000031', 'clave123', 'img31.jpg', 1),
+(32, 'Ricardo', 'Montes', 'ricardo.montes@example.com', '100000032', 'clave123', 'img32.jpg', 1),
+(33, 'Daniela', 'Peña', 'daniela.pena@example.com', '100000033', 'clave123', 'img33.jpg', 1),
+(34, 'Hugo', 'León', 'hugo.leon@example.com', '100000034', 'clave123', 'img34.jpg', 1),
+(35, 'Lucía', 'Cabrera', 'lucia.cabrera@example.com', '100000035', 'clave123', 'img35.jpg', 1),
+(36, 'Sebastián', 'Aguilar', 'sebastian.aguilar@example.com', '100000036', 'clave123', 'img36.jpg', 1),
+(37, 'Beatriz', 'Navarro', 'beatriz.navarro@example.com', '100000037', 'clave123', 'img37.jpg', 1),
+(38, 'Rodrigo', 'Miranda', 'rodrigo.miranda@example.com', '100000038', 'clave123', 'img38.jpg', 1),
+(39, 'Rosa', 'Fuentes', 'rosa.fuentes@example.com', '100000039', 'clave123', 'img39.jpg', 1),
+(40, 'Samuel', 'Ibáñez', 'samuel.ibanez@example.com', '100000040', 'clave123', 'img40.jpg', 1),
+(41, 'Paula', 'Luna', 'paula.luna@example.com', '100000041', 'clave123', 'img41.jpg', 1),
+(42, 'Álvaro', 'Valencia', 'alvaro.valencia@example.com', '100000042', 'clave123', 'img42.jpg', 1),
+(43, 'Gabriela', 'Suárez', 'gabriela.suarez@example.com', '100000043', 'clave123', 'img43.jpg', 1),
+(44, 'Felipe', 'Solís', 'felipe.solis@example.com', '100000044', 'clave123', 'img44.jpg', 1),
+(45, 'Teresa', 'Méndez', 'teresa.mendez@example.com', '100000045', 'clave123', 'img45.jpg', 1),
+(46, 'Joaquín', 'Escobar', 'joaquin.escobar@example.com', '100000046', 'clave123', 'img46.jpg', 1),
+(47, 'Diana', 'Pacheco', 'diana.pacheco@example.com', '100000047', 'clave123', 'img47.jpg', 1),
+(48, 'Óscar', 'Delgado', 'oscar.delgado@example.com', '100000048', 'clave123', 'img48.jpg', 1),
+(49, 'Alicia', 'Mejía', 'alicia.mejia@example.com', '100000049', 'clave123', 'img49.jpg', 1),
+(50, 'Tomás', 'Bermúdez', 'tomas.bermudez@example.com', '100000050', 'clave123', 'img50.jpg', 1);
 
 --
 -- Índices para tablas volcadas
@@ -936,19 +999,19 @@ ALTER TABLE `vendedor`
 -- AUTO_INCREMENT de la tabla `administrador`
 --
 ALTER TABLE `administrador`
-  MODIFY `idAdministrador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idAdministrador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `idCliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idCliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT de la tabla `mueble`
 --
 ALTER TABLE `mueble`
-  MODIFY `idMueble` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idMueble` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT de la tabla `propiedad`
@@ -960,19 +1023,13 @@ ALTER TABLE `propiedad`
 -- AUTO_INCREMENT de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
-  MODIFY `idProveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idProveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo`
 --
 ALTER TABLE `tipo`
   MODIFY `idTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
---
--- AUTO_INCREMENT de la tabla `vendedor`
---
-ALTER TABLE `vendedor`
-  MODIFY `idVendedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Restricciones para tablas volcadas
