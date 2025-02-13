@@ -2,8 +2,9 @@
 
 header('Content-Type: application/json');
 
-if (isset($_GET['idProducto'])) {
-    $proveedor = new PedidoProveedor(cantidadPost: null, , null, null, null, null, new Mueble($_GET['idProducto']));
+if (isset($_GET['productoId'])) {
+    $proveedor = new PedidoProveedor(null, null, null, null, 
+    null, null, new Mueble($_GET['productoId']));
     $proveedores = $proveedor->buscarPorIdMueble();
 
     // Crear un array para almacenar los resultados
@@ -14,8 +15,8 @@ if (isset($_GET['idProducto'])) {
             "cantidad" => $proveedor->getCantidadPost(),
             "precio" => $proveedor->getPrecioFinal(),
             "proveedor" => [
-                "id" => $proveedor->getProveedor()->getIdPersona(),
-                "nombre" => $proveedor->getProveedor()->getNombres(),
+                "id" => $proveedor->getProveedor()->getIdProveedor(),
+                "nombre" => $proveedor->getProveedor()->getRazonSocial(),
             ]
         ];
     }

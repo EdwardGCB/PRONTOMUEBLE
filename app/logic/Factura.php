@@ -79,6 +79,41 @@ class Factura{
         $this->cliente = $cliente;
     }
 
+    public function buscarPorNombreCliente(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $facturas = array();
+        $clientes = array();
+        $vendedores = array();
+        $facturaDAO = new FacturaDAO(null, null, null, null, 
+        null, null, null, null, $this->cliente);
+        $conexion->ejecutarConsulta($facturaDAO->buscarPorNombreCliente());
+        while($resultado = $conexion->siguienteRegistro()){
+            if(array_key_exists($resultado[5], $clientes)){
+                $cliente = $clientes[$resultado[5]];
+            }else{
+                $telefono = new Telefono($resultado[5]);
+                $telefonos = $telefono->consultarNumerosCliente();
+                $cliente = new Cliente($resultado[5], null, null, null, null, null, null, null, $telefonos);
+                $cliente->consultarPorId();
+                $clientes[$resultado[5]] = $cliente;
+            }
+            if(array_key_exists($resultado[6], $vendedores)){
+                $vendedor = $vendedores[$resultado[6]];
+            } else{
+                $vendedor = new Vendedor($resultado[6]);
+                $vendedor->consultarPorId();
+                $vendedores[$resultado[6]] = $vendedor;
+            }
+            $factura = new Factura($resultado[0], $resultado[1], null, $resultado[2], 
+            $resultado[3], null, $resultado[4], $vendedor, 
+            $cliente);
+            array_push($facturas, $factura);
+        }
+        $conexion->cerrarConexion();
+        return $facturas;
+    }
+
 }
 
 ?>

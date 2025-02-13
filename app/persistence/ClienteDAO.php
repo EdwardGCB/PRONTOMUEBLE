@@ -70,5 +70,17 @@ class ClienteDAO
             WHERE identificacion = ".$this->identificacion."";
     }
 
+    public function validarCotizacion(){
+        return "SELECT Vendedor_idVendedor, PedidoProveedor_Proveedor_idProveedor, PedidoProveedor_Mueble_idMueble
+                FROM cotizacion
+                WHERE Cliente_idCliente = $this->idPersona";
+    }
+
+    public function consultarPorId(){
+        return "SELECT nombre, apellido, identificacion, fechaCreacion, correo
+                FROM cliente
+                WHERE idCliente = $this->idPersona";
+    }
+
 }
 ?>

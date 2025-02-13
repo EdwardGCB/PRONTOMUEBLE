@@ -191,5 +191,36 @@ class Cliente extends Persona
         $conexion->cerrarConexion();
         return true;
     }
+
+    public function validarCotizacion(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $clienteDAO = new ClienteDAO(null,null,null, $this->identificacion);
+        $conexion->ejecutarConsulta($clienteDAO->validarCotizacion());
+        if($conexion->numeroFilas() > 0){
+            $conexion->cerrarConexion();
+            return true;
+        }
+        $conexion->cerrarConexion();
+        return false;
+    }
+
+    public function consultarPorId(){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $clienteDAO = new ClienteDAO($this->idPersona);
+        $conexion->ejecutarConsulta($clienteDAO->consultarPorId());
+        if($conexion->numeroFilas() == 0){
+            $conexion->cerrarConexion();
+            return false;
+        }
+        $registro = $conexion->siguienteRegistro();
+        $this->nombres=$registro[0];
+        $this->apellidos=$registro[1];
+        $this->identificacion=$registro[2];
+        $this->fecha_ini=$registro[3];
+        $this->correo=$registro[4];
+        return true;
+    }
 }
 ?>

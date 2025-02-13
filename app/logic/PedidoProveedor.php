@@ -90,6 +90,7 @@ class PedidoProveedor
         $conexion->ejecutarConsulta($pedidoProveedorDAO->buscarPorIdMueble());
         while($resultado = $conexion->siguienteRegistro()){
             $proveedor = new Proveedor($resultado[5]);
+            $proveedor->consultarPorId();
             $pedidoProveedor = new PedidoProveedor($resultado[0], $resultado[1], $resultado[2], $resultado[3], 
             $resultado[4], $proveedor, null);
             array_push($proveedores, $pedidoProveedor);

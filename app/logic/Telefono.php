@@ -100,3 +100,4 @@ class Telefono
         $conexion->cerrarConexion();
     }
 }
+?>
